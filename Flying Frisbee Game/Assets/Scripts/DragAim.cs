@@ -60,8 +60,14 @@ public class DragAim : MonoBehaviour
         if (startPosition != Vector3.zero && endPosition != Vector3.zero)
         {
             velocity = endPosition - startPosition;
-            Vector3 force = forceFactor * -velocity;
-            frisbee.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
+            // throw frisbee only if mouse moved (draged) more than a threshold
+            Debug.Log(velocity.magnitude);
+            if (velocity.magnitude > 0.1)
+            {
+                Vector3 force = forceFactor * -velocity;
+                frisbee.GetComponent<Frisbee>().DetachFromPlayer();
+                frisbee.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
+            }
         }
 
         LineRenderer lineRenderer = aimingHelper.GetComponent<LineRenderer>();
