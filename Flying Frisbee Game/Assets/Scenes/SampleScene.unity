@@ -232,20 +232,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 2
-  onCatch:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11500000, guid: 1207ad68b100a8a4fa13e2e3a6ac8cb6, type: 3}
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0
@@ -1109,7 +1095,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1706140343}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2012409193881759192, guid: 1f538ccb53d93be48a398ca11577c943,
         type: 3}
@@ -1121,6 +1107,16 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Frisbee
       objectReference: {fileID: 0}
+    - target: {fileID: 2012409193881759192, guid: 1f538ccb53d93be48a398ca11577c943,
+        type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2012409193881759192, guid: 1f538ccb53d93be48a398ca11577c943,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 65599869351841760, guid: 1f538ccb53d93be48a398ca11577c943,
         type: 3}
       propertyPath: m_Enabled
@@ -1129,17 +1125,17 @@ PrefabInstance:
     - target: {fileID: 647436518434029907, guid: 1f538ccb53d93be48a398ca11577c943,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.8
+      value: 0.84
       objectReference: {fileID: 0}
     - target: {fileID: 647436518434029907, guid: 1f538ccb53d93be48a398ca11577c943,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.62
+      value: 1.09
       objectReference: {fileID: 0}
     - target: {fileID: 647436518434029907, guid: 1f538ccb53d93be48a398ca11577c943,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.11000061
+      value: -18.11
       objectReference: {fileID: 0}
     - target: {fileID: 647436518434029907, guid: 1f538ccb53d93be48a398ca11577c943,
         type: 3}
@@ -1164,7 +1160,7 @@ PrefabInstance:
     - target: {fileID: 647436518434029907, guid: 1f538ccb53d93be48a398ca11577c943,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 647436518434029907, guid: 1f538ccb53d93be48a398ca11577c943,
         type: 3}
@@ -1205,6 +1201,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mass
       value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 54668363052709772, guid: 1f538ccb53d93be48a398ca11577c943,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}

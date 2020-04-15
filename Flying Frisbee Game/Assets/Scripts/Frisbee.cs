@@ -58,15 +58,20 @@ public class Frisbee : MonoBehaviour
 
     public void AttachToPlayer(GameObject player)
     {
-        transform.SetParent(player.transform);
-        transform.localPosition = new Vector3(0.8f, 0.0f, -0.11f);
-        transform.localRotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
+        FixedJoint fixedJoint = frisbeeObject.AddComponent<FixedJoint>();
+        fixedJoint.connectedBody = player.GetComponent<Rigidbody>();
+        fixedJoint.breakForce = 250;
     }
 
     public void DetachFromPlayer()
     {
-        Vector3 position = transform.position;
-        transform.SetParent(null, true);
+        Destroy(GetComponent<FixedJoint>());
+    }
+
+    void OnJointBreak(float breakForce)
+    {
+        Debug.Log("The frisbee/player FixedJoint has broken, Force: " + breakForce);
+        state = State.OnGround;
     }
 
     public enum State
