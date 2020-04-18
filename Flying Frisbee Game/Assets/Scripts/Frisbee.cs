@@ -31,18 +31,22 @@ public class Frisbee : MonoBehaviour
         else if (isStateChangeFresh(state, State.Flying))
         {
             DetachFromPlayer();
+            Rigidbody body = frisbeeObject.GetComponent<Rigidbody>();
+            body.AddForce(9 * Vector3.up, ForceMode.Acceleration);
+            Debug.Log("Added lift force");
         }
         else if (isStateChangeFresh(state, State.OnGround))
         {
-            DetachFromPlayer();
+
         }
         else if (isStateChangeFresh(state, State.OutOfBounds))
         {
-            DetachFromPlayer();
+
         }
     }
 
     /// Checks if a given state is equal to a desiredState and if it's changed to it for the first time.
+    /// Basically: Checks if a state is changed for the first time.
     private bool isStateChangeFresh(State state, State desiredState)
     {
         if (state == desiredState && previousState != desiredState)
@@ -58,7 +62,6 @@ public class Frisbee : MonoBehaviour
     }
 
     /// Attaches the frisbee to another GameObject (= player).
-    /// This means the frisbee will move together with the player.
     /// Its relative position to the attached object is defined by 'relativePosition'.
     public void AttachToPlayer(GameObject player, Vector3 relativePosition)
     {
@@ -69,10 +72,9 @@ public class Frisbee : MonoBehaviour
         FixedJoint fixedJoint = frisbeeObject.AddComponent<FixedJoint>();
         fixedJoint.connectedBody = playerHoldingTheFrisbee.GetComponent<Rigidbody>();
         fixedJoint.breakForce = 250;
-
     }
 
-    /// Detached the frisbee from the currently attached object.
+    /// Detaches the frisbee from the player who is holding it.
     public void DetachFromPlayer()
     {
         if (playerHoldingTheFrisbee != null)

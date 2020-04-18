@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class DragAim : MonoBehaviour
 {
-    public float forceFactor = 0.1f;
+
+    public float throwAngleDegree = 30f;
     Vector3 startPosition;
     Vector3 endPosition;
-    Vector3 velocity;
+    Vector3 deltaDistance;
     private bool isAiming = false;
 
     private GameObject aimingHelper;
@@ -59,19 +60,42 @@ public class DragAim : MonoBehaviour
         isAiming = false;
         if (startPosition != Vector3.zero && endPosition != Vector3.zero)
         {
-            velocity = endPosition - startPosition;
-            // throw frisbee only if mouse moved (draged) more than a threshold
-            Debug.Log(velocity.magnitude);
-            if (velocity.magnitude > 0.1)
+            deltaDistance = endPosition - startPosition;
+            // throw frisbee only if mouse moved (dragged) more than a threshold
+            if (deltaDistance.magnitude > 0.1)
             {
-                Vector3 force = forceFactor * -velocity;
+                float angleToWorldX = Vector3.SignedAngle(deltaDistance, Vector3.right, Vector3.up);
+
+                float v0 = getThrowVelocity(deltaDistance.magnitude);
+                float throwAngleRad = throwAngleDegree * Mathf.Deg2Rad;
+                float vx = -(v0 * Mathf.Cos(throwAngleRad)) * Mathf.Cos(angleToWorldX * Mathf.Deg2Rad);
+                float vy = v0 * Mathf.Sin(throwAngleRad);
+                float vz = -(v0 * Mathf.Cos(throwAngleRad)) * Mathf.Sin(angleToWorldX * Mathf.Deg2Rad);
+                Vector3 velocity = new Vector3(vx, vy, vz);
+
                 frisbee.GetComponent<Frisbee>().DetachFromPlayer();
-                frisbee.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
+                frisbee.GetComponent<Rigidbody>().AddForce(velocity, ForceMode.VelocityChange);
             }
         }
 
         LineRenderer lineRenderer = aimingHelper.GetComponent<LineRenderer>();
         lineRenderer.enabled = false;
+    }
+
+    private float getThrowVelocity(float distance)
+    {
+        // return Mathf.Sqrt(sqrDistance * -Physics.gravity.y / Mathf.Sin(2 * throwAngleDegree * Mathf.Deg2Rad));
+        float h0 = 0.5f;
+        float throwAngleRad = throwAngleDegree * Mathf.Deg2Rad;
+        float denominator = -2 * (-h0 - distance * Mathf.Tan(throwAngleRad)) * Mathf.Cos(throwAngleRad) * Mathf.Cos(throwAngleRad);
+
+        Debug.Log("denominator: " + denominator);
+        if (Mathf.Approximately(distance, 0.0f) || Mathf.Approximately(denominator, 0.0f))
+        {
+            return 0.0f;
+        }
+
+        return Mathf.Sqrt(distance * distance * -Physics.gravity.y / denominator);
     }
 
     private Vector3 GetMousePositionOnGroundAsWorldCoordinate()
