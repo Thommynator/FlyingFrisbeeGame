@@ -31,9 +31,6 @@ public class Frisbee : MonoBehaviour
         else if (isStateChangeFresh(state, State.Flying))
         {
             DetachFromPlayer();
-            Rigidbody body = frisbeeObject.GetComponent<Rigidbody>();
-            body.AddForce(9 * Vector3.up, ForceMode.Acceleration);
-            Debug.Log("Added lift force");
         }
         else if (isStateChangeFresh(state, State.OnGround))
         {

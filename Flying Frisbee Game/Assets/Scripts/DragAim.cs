@@ -17,6 +17,11 @@ public class DragAim : MonoBehaviour
 
     private LineRenderer lineRenderer;
 
+    private GameObject throwDistanceIndicator;
+
+    /// Multiplies the "drag"-distance, e.g. 10m dragged = 20m thrown 
+    private float forceFactor = 2.0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +29,8 @@ public class DragAim : MonoBehaviour
 
         frisbee = GameObject.FindGameObjectWithTag("Frisbee");
         lineRenderer = GetComponent<LineRenderer>();
+        throwDistanceIndicator = GameObject.Find("ThrowDistanceIndicator");
+        throwDistanceIndicator.GetComponent<MeshRenderer>().enabled = false;
     }
 
     // Update is called once per frame
@@ -38,6 +45,10 @@ public class DragAim : MonoBehaviour
             lineRenderer.enabled = true;
             lineRenderer.SetPosition(0, startPosition + Vector3.up * 0.5f);
             lineRenderer.SetPosition(1, endPosition + Vector3.up * 0.5f);
+
+            throwDistanceIndicator.GetComponent<MeshRenderer>().enabled = true;
+            float newZ = frisbee.transform.position.z + forceFactor * (startPosition.z - endPosition.z);
+            throwDistanceIndicator.transform.position = new Vector3(throwDistanceIndicator.transform.position.x, throwDistanceIndicator.transform.position.y, newZ);
         }
     }
 
@@ -52,13 +63,13 @@ public class DragAim : MonoBehaviour
         isAiming = false;
         if (startPosition != Vector3.zero && endPosition != Vector3.zero)
         {
-            deltaDistance = endPosition - startPosition;
+            deltaDistance = GetThrowDistanceVector();
             // throw frisbee only if mouse moved (dragged) more than a threshold
             if (deltaDistance.magnitude > 0.1)
             {
                 float angleToWorldX = Vector3.SignedAngle(deltaDistance, Vector3.right, Vector3.up);
 
-                float v0 = getThrowVelocity(deltaDistance.magnitude);
+                float v0 = GetThrowVelocity(deltaDistance.magnitude);
                 float throwAngleRad = throwAngleDegree * Mathf.Deg2Rad;
                 float vx = -(v0 * Mathf.Cos(throwAngleRad)) * Mathf.Cos(angleToWorldX * Mathf.Deg2Rad);
                 float vy = v0 * Mathf.Sin(throwAngleRad);
@@ -71,9 +82,15 @@ public class DragAim : MonoBehaviour
         }
 
         lineRenderer.enabled = false;
+        throwDistanceIndicator.GetComponent<MeshRenderer>().enabled = false;
     }
 
-    private float getThrowVelocity(float distance)
+    private Vector3 GetThrowDistanceVector()
+    {
+        return forceFactor * (endPosition - startPosition);
+    }
+
+    private float GetThrowVelocity(float distance)
     {
         // return Mathf.Sqrt(sqrDistance * -Physics.gravity.y / Mathf.Sin(2 * throwAngleDegree * Mathf.Deg2Rad));
         float h0 = 0.5f;
