@@ -15,22 +15,15 @@ public class DragAim : MonoBehaviour
 
     private GameObject frisbee;
 
+    private LineRenderer lineRenderer;
+
     // Start is called before the first frame update
     void Start()
     {
         isAiming = false;
 
         frisbee = GameObject.FindGameObjectWithTag("Frisbee");
-
-        // configure aiming helper properties
-        aimingHelper = new GameObject("Aiming Helper");
-        aimingHelper.AddComponent<LineRenderer>();
-        LineRenderer lineRenderer = aimingHelper.GetComponent<LineRenderer>();
-        lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        lineRenderer.startColor = Color.green;
-        lineRenderer.endColor = Color.red;
-        lineRenderer.startWidth = 0.1f;
-        lineRenderer.endWidth = 0.4f;
+        lineRenderer = GetComponent<LineRenderer>();
     }
 
     // Update is called once per frame
@@ -42,10 +35,9 @@ public class DragAim : MonoBehaviour
             endPosition = GetMousePositionOnGroundAsWorldCoordinate();
             Debug.DrawLine(startPosition, endPosition);
 
-            LineRenderer lineRenderer = aimingHelper.GetComponent<LineRenderer>();
             lineRenderer.enabled = true;
-            lineRenderer.SetPosition(0, startPosition + Vector3.up * 0.1f);
-            lineRenderer.SetPosition(1, endPosition + Vector3.up * 0.1f);
+            lineRenderer.SetPosition(0, startPosition + Vector3.up * 0.5f);
+            lineRenderer.SetPosition(1, endPosition + Vector3.up * 0.5f);
         }
     }
 
@@ -78,7 +70,6 @@ public class DragAim : MonoBehaviour
             }
         }
 
-        LineRenderer lineRenderer = aimingHelper.GetComponent<LineRenderer>();
         lineRenderer.enabled = false;
     }
 
@@ -89,7 +80,6 @@ public class DragAim : MonoBehaviour
         float throwAngleRad = throwAngleDegree * Mathf.Deg2Rad;
         float denominator = -2 * (-h0 - distance * Mathf.Tan(throwAngleRad)) * Mathf.Cos(throwAngleRad) * Mathf.Cos(throwAngleRad);
 
-        Debug.Log("denominator: " + denominator);
         if (Mathf.Approximately(distance, 0.0f) || Mathf.Approximately(denominator, 0.0f))
         {
             return 0.0f;
