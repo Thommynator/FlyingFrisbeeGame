@@ -26,7 +26,7 @@ public class Frisbee : MonoBehaviour
     {
         if (isStateChangeFresh(state, State.AtPlayer))
         {
-            AttachToPlayer(GameObject.Find("Player"), Vector3.right);
+            AttachToPlayer(GameObject.Find("Player"), new Vector3(1, 0, 0));
         }
         else if (isStateChangeFresh(state, State.Flying))
         {
@@ -80,6 +80,9 @@ public class Frisbee : MonoBehaviour
             playerHoldingTheFrisbee = null;
         }
         Destroy(GetComponent<FixedJoint>());
+        // for some reason the frisbee has some velocity after removing the FixedJoint, 
+        // which makes the distance incorrect
+        frisbeeObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
         state = State.Flying;
     }
 
@@ -99,7 +102,7 @@ public class Frisbee : MonoBehaviour
 
         if (collision.gameObject.tag == "Player")
         {
-            AttachToPlayer(collision.gameObject, Vector3.right);
+            AttachToPlayer(collision.gameObject, new Vector3(1, 0, 0));
         }
     }
 
