@@ -29,6 +29,7 @@ public class Frisbee : MonoBehaviour
 
     void Update()
     {
+
         CheckIfOutOfBounds();
 
         if (Input.GetMouseButtonDown(1))
@@ -54,7 +55,7 @@ public class Frisbee : MonoBehaviour
         }
         else if (IsStateChangeFresh(state, State.OUT_OF_BOUNDS))
         {
-
+            Debug.Log("Out of bounds. GAME OVER");
         }
     }
 
@@ -130,7 +131,6 @@ public class Frisbee : MonoBehaviour
         if (frisbeeObject.transform.position.y < -0.5)
         {
             state = State.OUT_OF_BOUNDS;
-            Debug.Log("Frisbee is out of bounds.");
             return true;
         }
         return false;
