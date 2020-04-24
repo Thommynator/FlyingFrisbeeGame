@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class DragAim : MonoBehaviour
 {
-
-    public float throwAngleDegree = 30f;
     Vector3 startPosition;
     Vector3 endPosition;
     Vector3 deltaDistanceVector;
@@ -70,7 +68,7 @@ public class DragAim : MonoBehaviour
                 float angleToWorldX = Vector3.SignedAngle(deltaDistanceVector, Vector3.right, Vector3.up);
 
                 float v0 = GetThrowVelocity(deltaDistanceVector.magnitude);
-                float throwAngleRad = throwAngleDegree * Mathf.Deg2Rad;
+                float throwAngleRad = frisbee.GetComponent<Frisbee>().throwAngleDegree * Mathf.Deg2Rad;
                 float vx = -v0 * Mathf.Cos(throwAngleRad) * Mathf.Cos(angleToWorldX * Mathf.Deg2Rad);
                 float vy = v0 * Mathf.Sin(throwAngleRad);
                 float vz = -v0 * Mathf.Cos(throwAngleRad) * Mathf.Sin(angleToWorldX * Mathf.Deg2Rad);
@@ -92,8 +90,7 @@ public class DragAim : MonoBehaviour
     private float GetThrowVelocity(float distance)
     {
         float h0 = frisbee.transform.position.y;
-        Debug.Log("h0= " + h0);
-        float throwAngleRad = throwAngleDegree * Mathf.Deg2Rad;
+        float throwAngleRad = frisbee.GetComponent<Frisbee>().throwAngleDegree * Mathf.Deg2Rad;
         float denominator = 2 * (h0 + (distance * Mathf.Tan(throwAngleRad))) * Mathf.Cos(throwAngleRad) * Mathf.Cos(throwAngleRad);
 
         if (Mathf.Approximately(distance, 0.0f) || Mathf.Approximately(denominator, 0.0f))

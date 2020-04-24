@@ -5,6 +5,8 @@ using UnityEngine;
 public class Frisbee : MonoBehaviour
 {
 
+    public float throwAngleDegree = 30f;
+
     public State state;
 
     private State previousState;
@@ -13,30 +15,44 @@ public class Frisbee : MonoBehaviour
 
     private GameObject playerHoldingTheFrisbee;
 
+    public ThrowSide throwSide;
+
+
     // Start is called before the first frame update
     void Start()
     {
         frisbeeObject = GameObject.FindGameObjectWithTag("Frisbee");
+        throwSide = ThrowSide.RIGHT;
+        AttachToPlayer(GameObject.Find("Player"), throwSide);
     }
 
 
+    void Update()
+    {
+        CheckIfOutOfBounds();
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            SwitchThrowSide();
+        }
+    }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (isStateChangeFresh(state, State.AtPlayer))
-        {
-            AttachToPlayer(GameObject.Find("Player"), new Vector3(1, 0, 0));
-        }
-        else if (isStateChangeFresh(state, State.Flying))
-        {
-            DetachFromPlayer();
-        }
-        else if (isStateChangeFresh(state, State.OnGround))
+        if (IsStateChangeFresh(state, State.AT_PLAYER))
         {
 
         }
-        else if (isStateChangeFresh(state, State.OutOfBounds))
+        else if (IsStateChangeFresh(state, State.FLYING))
+        {
+            DetachFromPlayer();
+        }
+        else if (IsStateChangeFresh(state, State.ON_GROUND))
+        {
+
+        }
+        else if (IsStateChangeFresh(state, State.OUT_OF_BOUNDS))
         {
 
         }
@@ -44,7 +60,7 @@ public class Frisbee : MonoBehaviour
 
     /// Checks if a given state is equal to a desiredState and if it's changed to it for the first time.
     /// Basically: Checks if a state is changed for the first time.
-    private bool isStateChangeFresh(State state, State desiredState)
+    private bool IsStateChangeFresh(State state, State desiredState)
     {
         if (state == desiredState && previousState != desiredState)
         {
@@ -59,13 +75,23 @@ public class Frisbee : MonoBehaviour
     }
 
     /// Attaches the frisbee to another GameObject (= player).
-    /// Its relative position to the attached object is defined by 'relativePosition'.
-    public void AttachToPlayer(GameObject player, Vector3 relativePosition)
+    public void AttachToPlayer(GameObject player, ThrowSide throwSide)
     {
+        DetachFromPlayer();
+
+        state = State.AT_PLAYER;
         playerHoldingTheFrisbee = player;
         playerHoldingTheFrisbee.GetComponent<PlayerMovement>().canMove = false;
 
-        transform.position = playerHoldingTheFrisbee.transform.position + relativePosition;
+        if (throwSide == ThrowSide.RIGHT)
+        {
+            transform.position = playerHoldingTheFrisbee.transform.position + Vector3.right;
+        }
+        else if (throwSide == ThrowSide.LEFT)
+        {
+            transform.position = playerHoldingTheFrisbee.transform.position + Vector3.left;
+        }
+
         FixedJoint fixedJoint = frisbeeObject.AddComponent<FixedJoint>();
         fixedJoint.connectedBody = playerHoldingTheFrisbee.GetComponent<Rigidbody>();
         fixedJoint.breakForce = 250;
@@ -83,13 +109,37 @@ public class Frisbee : MonoBehaviour
         // for some reason the frisbee has some velocity after removing the FixedJoint, 
         // which makes the distance incorrect
         frisbeeObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
-        state = State.Flying;
+        state = State.FLYING;
+    }
+
+    private void SwitchThrowSide()
+    {
+        if (throwSide == ThrowSide.RIGHT)
+        {
+            throwSide = ThrowSide.LEFT;
+        }
+        else if (throwSide == ThrowSide.LEFT)
+        {
+            throwSide = ThrowSide.RIGHT;
+        }
+        AttachToPlayer(playerHoldingTheFrisbee, throwSide);
+    }
+
+    private bool CheckIfOutOfBounds()
+    {
+        if (frisbeeObject.transform.position.y < -0.5)
+        {
+            state = State.OUT_OF_BOUNDS;
+            Debug.Log("Frisbee is out of bounds.");
+            return true;
+        }
+        return false;
     }
 
     void OnJointBreak(float breakForce)
     {
         Debug.Log("The frisbee/player FixedJoint has broken, Force: " + breakForce);
-        state = State.Flying;
+        state = State.FLYING;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -97,20 +147,27 @@ public class Frisbee : MonoBehaviour
         if (collision.gameObject.name == "GroundPlane")
         {
             Debug.Log("Frisbee hit the ground.");
-            state = State.OnGround;
+            state = State.ON_GROUND;
         }
 
         if (collision.gameObject.tag == "Player")
         {
-            AttachToPlayer(collision.gameObject, new Vector3(1, 0, 0));
+            AttachToPlayer(collision.gameObject, throwSide);
         }
     }
 
     public enum State
     {
-        Flying,
-        OnGround,
-        AtPlayer,
-        OutOfBounds
+        FLYING,
+        ON_GROUND,
+        AT_PLAYER,
+        OUT_OF_BOUNDS
+    }
+
+    public enum ThrowSide
+    {
+        LEFT,
+        RIGHT
+
     }
 }
