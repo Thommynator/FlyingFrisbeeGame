@@ -34,11 +34,13 @@ public class DragAim : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (isAiming)
         {
+            AdjustThrowAngle();
+
             // draw line to mouse position
             endPosition = GetMousePositionOnGroundAsWorldCoordinate();
-            Debug.DrawLine(startPosition, endPosition);
 
             lineRenderer.enabled = true;
             lineRenderer.SetPosition(0, startPosition + Vector3.up * 0.5f);
@@ -99,6 +101,19 @@ public class DragAim : MonoBehaviour
         }
 
         return Mathf.Sqrt(distance * distance * -Physics.gravity.y / denominator);
+    }
+
+    /// Uses the mousewheel scrolling to adjust the throw angle of the frisbee
+    private void AdjustThrowAngle()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
+        {
+            frisbee.GetComponent<Frisbee>().DecreaseThrowAngle();
+        }
+        else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
+        {
+            frisbee.GetComponent<Frisbee>().IncreaseThrowAngle();
+        }
     }
 
     private Vector3 GetMousePositionOnGroundAsWorldCoordinate()

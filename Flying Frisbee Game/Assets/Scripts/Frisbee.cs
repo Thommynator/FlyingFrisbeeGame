@@ -17,6 +17,9 @@ public class Frisbee : MonoBehaviour
 
     public ThrowSide throwSide;
 
+    private float minThrowAngleInDegree = 10.0f;
+    private float maxThrowAngleInDegree = 55f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +35,7 @@ public class Frisbee : MonoBehaviour
 
         CheckIfOutOfBounds();
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && state == State.AT_PLAYER)
         {
             SwitchThrowSide();
         }
@@ -111,6 +114,18 @@ public class Frisbee : MonoBehaviour
         // which makes the distance incorrect
         frisbeeObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
         state = State.FLYING;
+    }
+
+    public void IncreaseThrowAngle()
+    {
+        throwAngleDegree++;
+        throwAngleDegree = Mathf.Clamp(throwAngleDegree, minThrowAngleInDegree, maxThrowAngleInDegree);
+    }
+
+    public void DecreaseThrowAngle()
+    {
+        throwAngleDegree--;
+        throwAngleDegree = Mathf.Clamp(throwAngleDegree, minThrowAngleInDegree, maxThrowAngleInDegree);
     }
 
     private void SwitchThrowSide()
