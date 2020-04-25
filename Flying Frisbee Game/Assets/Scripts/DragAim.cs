@@ -67,14 +67,7 @@ public class DragAim : MonoBehaviour
             // throw frisbee only if mouse moved (dragged) more than a threshold
             if (deltaDistanceVector.magnitude > 0.1)
             {
-                float angleToWorldX = Vector3.SignedAngle(deltaDistanceVector, Vector3.right, Vector3.up);
-
-                float v0 = GetThrowVelocity(deltaDistanceVector.magnitude);
-                float throwAngleRad = frisbee.GetComponent<Frisbee>().throwAngleDegree * Mathf.Deg2Rad;
-                float vx = -v0 * Mathf.Cos(throwAngleRad) * Mathf.Cos(angleToWorldX * Mathf.Deg2Rad);
-                float vy = v0 * Mathf.Sin(throwAngleRad);
-                float vz = -v0 * Mathf.Cos(throwAngleRad) * Mathf.Sin(angleToWorldX * Mathf.Deg2Rad);
-                Vector3 velocity = new Vector3(vx, vy, vz);
+                Vector3 velocity = GetThrowVelocityVector(deltaDistanceVector);
                 frisbee.GetComponent<Frisbee>().DetachFromPlayer();
                 frisbee.GetComponent<Rigidbody>().AddForce(velocity, ForceMode.VelocityChange);
             }
@@ -89,7 +82,7 @@ public class DragAim : MonoBehaviour
         return forceFactor * (endPosition - startPosition);
     }
 
-    private float GetThrowVelocity(float distance)
+    private float GetThrowVelocityScalar(float distance)
     {
         float h0 = frisbee.transform.position.y;
         float throwAngleRad = frisbee.GetComponent<Frisbee>().throwAngleDegree * Mathf.Deg2Rad;
@@ -101,6 +94,21 @@ public class DragAim : MonoBehaviour
         }
 
         return Mathf.Sqrt(distance * distance * -Physics.gravity.y / denominator);
+    }
+
+    private Vector3 GetThrowVelocityVector(Vector3 distanceVector)
+    {
+        float angleToWorldX = Vector3.SignedAngle(distanceVector, Vector3.right, Vector3.up);
+        float v0 = GetThrowVelocityScalar(distanceVector.magnitude);
+        float throwAngleRad = frisbee.GetComponent<Frisbee>().throwAngleDegree * Mathf.Deg2Rad;
+        float vx = -v0 * Mathf.Cos(throwAngleRad) * Mathf.Cos(angleToWorldX * Mathf.Deg2Rad);
+        float vy = v0 * Mathf.Sin(throwAngleRad);
+        float vz = -v0 * Mathf.Cos(throwAngleRad) * Mathf.Sin(angleToWorldX * Mathf.Deg2Rad);
+        return new Vector3(vx, vy, vz);
+    }
+
+    private void DrawThrowCurve(Vector3 throwVelocityVector){
+        
     }
 
     /// Uses the mousewheel scrolling to adjust the throw angle of the frisbee
