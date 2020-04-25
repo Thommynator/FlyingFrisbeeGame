@@ -6,8 +6,8 @@ With this little Ultimate Frisbee game I want to get more familiar with Unity.
 
 ### 25.04.2020
 * Camera and spotlight are following the frisbee. 
-* Thrower can switch his throw hand (left/right). 
 * Throw angle can be adjusted to throw higher or lower.
+* Thrower can switch his throw hand (left/right). 
 
 ![](demo2.gif)
 
