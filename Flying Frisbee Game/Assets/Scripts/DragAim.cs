@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,16 +40,21 @@ public class DragAim : MonoBehaviour
         {
             AdjustThrowAngle();
 
-            // draw line to mouse position
-            endPosition = GetMousePositionOnGroundAsWorldCoordinate();
-
+            // Drag-line for aiming
             lineRenderer.enabled = true;
+            endPosition = GetMousePositionOnGroundAsWorldCoordinate();
             lineRenderer.SetPosition(0, startPosition + Vector3.up * 0.5f);
             lineRenderer.SetPosition(1, endPosition + Vector3.up * 0.5f);
 
+            // horizontal distance indicator on the ground
             throwDistanceIndicator.GetComponent<MeshRenderer>().enabled = true;
-            float newZ = frisbee.transform.position.z - GetThrowDistanceVector().z;
+            float newZ = frisbee.transform.position.z + GetThrowDistanceVector().z;
             throwDistanceIndicator.transform.position = new Vector3(throwDistanceIndicator.transform.position.x, throwDistanceIndicator.transform.position.y, newZ);
+
+            // curve indicator
+            Vector3 targetInWorld = GetThrowDistanceVector();
+            float v0 = GetThrowVelocityScalar(targetInWorld.magnitude);
+            DrawThrowCurve(v0);
         }
     }
 
@@ -79,9 +85,10 @@ public class DragAim : MonoBehaviour
 
     private Vector3 GetThrowDistanceVector()
     {
-        return forceFactor * (endPosition - startPosition);
+        return forceFactor * (startPosition - endPosition);
     }
 
+    /// Computes v0 (scalar) that is needed to reach the distance with the given throw angle.
     private float GetThrowVelocityScalar(float distance)
     {
         float h0 = frisbee.transform.position.y;
@@ -101,15 +108,40 @@ public class DragAim : MonoBehaviour
         float angleToWorldX = Vector3.SignedAngle(distanceVector, Vector3.right, Vector3.up);
         float v0 = GetThrowVelocityScalar(distanceVector.magnitude);
         float throwAngleRad = frisbee.GetComponent<Frisbee>().throwAngleDegree * Mathf.Deg2Rad;
-        float vx = -v0 * Mathf.Cos(throwAngleRad) * Mathf.Cos(angleToWorldX * Mathf.Deg2Rad);
+        float vx = v0 * Mathf.Cos(throwAngleRad) * Mathf.Cos(angleToWorldX * Mathf.Deg2Rad);
         float vy = v0 * Mathf.Sin(throwAngleRad);
-        float vz = -v0 * Mathf.Cos(throwAngleRad) * Mathf.Sin(angleToWorldX * Mathf.Deg2Rad);
+        float vz = v0 * Mathf.Cos(throwAngleRad) * Mathf.Sin(angleToWorldX * Mathf.Deg2Rad);
         return new Vector3(vx, vy, vz);
     }
 
-    private void DrawThrowCurve(Vector3 throwVelocityVector){
-        
+    private void DrawThrowCurve(float v0)
+    {
+
+        GameObject curveIndicator = new GameObject("CurveIndicator");
+        for (float t = 0; t < 2; t += 0.01f)
+        {
+            float horizontalPos = v0 * Mathf.Cos(frisbee.GetComponent<Frisbee>().throwAngleDegree * Mathf.Deg2Rad) * t;
+            float verticalPos = v0 * Mathf.Sin(frisbee.GetComponent<Frisbee>().throwAngleDegree * Mathf.Deg2Rad) * t - 0.5f * -Physics.gravity.y * t * t;
+
+            GameObject spehre = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            spehre.transform.SetParent(curveIndicator.transform);
+            Destroy(spehre.GetComponent<SphereCollider>());
+            spehre.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            spehre.transform.localPosition = new Vector3(0, verticalPos, horizontalPos);
+        }
+
+        Vector3 distanceVector = GetThrowDistanceVector();
+        curveIndicator.transform.position = frisbee.transform.position;
+        curveIndicator.transform.LookAt(distanceVector + frisbee.transform.position, Vector3.up);
+        Destroy(curveIndicator, 0.05f);
     }
+
+    // void OnDrawGizmos()
+    // {
+    //     // Draw a yellow sphere at the target position
+    //     Gizmos.color = Color.yellow;
+    //     Gizmos.DrawSphere(GetThrowDistanceVector() + frisbee.transform.position, 1);
+    // }
 
     /// Uses the mousewheel scrolling to adjust the throw angle of the frisbee
     private void AdjustThrowAngle()
