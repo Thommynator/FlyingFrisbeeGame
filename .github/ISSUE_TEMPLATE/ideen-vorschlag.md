@@ -2,7 +2,7 @@
 name: Ideen Vorschlag
 about: Du hast neue Ideen? Immer her damit! ;)
 title: "[FEATURE]"
-labels: ''
+labels: enhancement
 assignees: ''
 
 ---
