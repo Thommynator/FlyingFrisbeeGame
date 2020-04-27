@@ -10,8 +10,6 @@ public class DragAim : MonoBehaviour
     Vector3 deltaDistanceVector;
     private bool isAiming = false;
 
-    private GameObject aimingHelper;
-
     private GameObject frisbee;
 
     private LineRenderer lineRenderer;
@@ -19,7 +17,7 @@ public class DragAim : MonoBehaviour
     private GameObject throwDistanceIndicator;
 
     /// Multiplies the "drag"-distance, e.g. 10m dragged = 20m thrown 
-    private float forceFactor = 2.0f;
+    public float forceFactor = 0.1f;
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +40,7 @@ public class DragAim : MonoBehaviour
 
             // Drag-line for aiming
             lineRenderer.enabled = true;
-            endPosition = GetMousePositionOnGroundAsWorldCoordinate();
+            endPosition = GetMousePositionOnPlaneAsWorldCoordinate();
             lineRenderer.SetPosition(0, startPosition + Vector3.up * 0.5f);
             lineRenderer.SetPosition(1, endPosition + Vector3.up * 0.5f);
 
@@ -61,7 +59,7 @@ public class DragAim : MonoBehaviour
     void OnMouseDown()
     {
         isAiming = true;
-        startPosition = GetMousePositionOnGroundAsWorldCoordinate();
+        startPosition = GetMousePositionOnPlaneAsWorldCoordinate();
     }
 
     void OnMouseUp()
@@ -83,9 +81,9 @@ public class DragAim : MonoBehaviour
         throwDistanceIndicator.GetComponent<MeshRenderer>().enabled = false;
     }
 
-    private Vector3 GetThrowDistanceVector()
+    public Vector3 GetThrowDistanceVector()
     {
-        return forceFactor * (startPosition - endPosition);
+        return forceFactor * (endPosition - startPosition);
     }
 
     /// Computes v0 (scalar) that is needed to reach the distance with the given throw angle.
@@ -156,9 +154,10 @@ public class DragAim : MonoBehaviour
         }
     }
 
-    private Vector3 GetMousePositionOnGroundAsWorldCoordinate()
+    private Vector3 GetMousePositionOnPlaneAsWorldCoordinate()
     {
-        Plane plane = new Plane(Vector3.up, 0);
+        Plane plane = new Plane(Vector3.up, 0.0f);
+
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         float distance;
@@ -166,6 +165,7 @@ public class DragAim : MonoBehaviour
         {
             return ray.GetPoint(distance);
         }
+
         return Vector3.zero;
     }
 }
