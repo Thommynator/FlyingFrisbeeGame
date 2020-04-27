@@ -10,8 +10,6 @@ public class DragAim : MonoBehaviour
     Vector3 deltaDistanceVector;
     private bool isAiming = false;
 
-    private GameObject aimingHelper;
-
     private GameObject frisbee;
 
     private LineRenderer lineRenderer;
@@ -19,7 +17,7 @@ public class DragAim : MonoBehaviour
     private GameObject throwDistanceIndicator;
 
     /// Multiplies the "drag"-distance, e.g. 10m dragged = 20m thrown 
-    private float forceFactor = 2.0f;
+    public float forceFactor = 0.1f;
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +40,7 @@ public class DragAim : MonoBehaviour
 
             // Drag-line for aiming
             lineRenderer.enabled = true;
-            endPosition = GetMousePositionOnGroundAsWorldCoordinate();
+            endPosition = GetMousePositionPlaneAsWorldCoordinate();
             lineRenderer.SetPosition(0, startPosition + Vector3.up * 0.5f);
             lineRenderer.SetPosition(1, endPosition + Vector3.up * 0.5f);
 
@@ -61,7 +59,7 @@ public class DragAim : MonoBehaviour
     void OnMouseDown()
     {
         isAiming = true;
-        startPosition = GetMousePositionOnGroundAsWorldCoordinate();
+        startPosition = GetMousePositionPlaneAsWorldCoordinate();
     }
 
     void OnMouseUp()
@@ -83,8 +81,9 @@ public class DragAim : MonoBehaviour
         throwDistanceIndicator.GetComponent<MeshRenderer>().enabled = false;
     }
 
-    private Vector3 GetThrowDistanceVector()
+    public Vector3 GetThrowDistanceVector()
     {
+        Debug.Log(forceFactor * (endPosition - startPosition));
         return forceFactor * (endPosition - startPosition);
     }
 
@@ -156,16 +155,19 @@ public class DragAim : MonoBehaviour
         }
     }
 
-    private Vector3 GetMousePositionOnGroundAsWorldCoordinate()
+    private Vector3 GetMousePositionPlaneAsWorldCoordinate()
     {
-        Plane plane = new Plane(Vector3.up, 0);
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        // Plane plane = new Plane(Vector3.up, 0.0f);
 
-        float distance;
-        if (plane.Raycast(ray, out distance))
-        {
-            return ray.GetPoint(distance);
-        }
-        return Vector3.zero;
+        // var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        // float distance;
+        // if (plane.Raycast(ray, out distance))
+        // {
+        //     return ray.GetPoint(distance);
+        // }
+        Vector3 mousePos = Input.mousePosition;
+        // Debug.Log(mousePos);
+        return new Vector3(mousePos.x, 0, mousePos.y);
     }
 }

@@ -8,7 +8,6 @@ public class FollowFrisbee : MonoBehaviour
     public bool followXAxis;
     public bool followYAxis;
     public bool followZAxis;
-    public bool rotateAroundYAxis;
     private GameObject frisbee;
 
     // Start is called before the first frame update
