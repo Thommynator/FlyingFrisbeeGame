@@ -40,7 +40,7 @@ public class DragAim : MonoBehaviour
 
             // Drag-line for aiming
             lineRenderer.enabled = true;
-            endPosition = GetMousePositionPlaneAsWorldCoordinate();
+            endPosition = GetMousePositionOnPlaneAsWorldCoordinate();
             lineRenderer.SetPosition(0, startPosition + Vector3.up * 0.5f);
             lineRenderer.SetPosition(1, endPosition + Vector3.up * 0.5f);
 
@@ -59,7 +59,7 @@ public class DragAim : MonoBehaviour
     void OnMouseDown()
     {
         isAiming = true;
-        startPosition = GetMousePositionPlaneAsWorldCoordinate();
+        startPosition = GetMousePositionOnPlaneAsWorldCoordinate();
     }
 
     void OnMouseUp()
@@ -154,7 +154,7 @@ public class DragAim : MonoBehaviour
         }
     }
 
-    private Vector3 GetMousePositionPlaneAsWorldCoordinate()
+    private Vector3 GetMousePositionOnPlaneAsWorldCoordinate()
     {
         Plane plane = new Plane(Vector3.up, 0.0f);
 
