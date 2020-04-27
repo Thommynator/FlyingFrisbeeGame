@@ -83,7 +83,6 @@ public class DragAim : MonoBehaviour
 
     public Vector3 GetThrowDistanceVector()
     {
-        Debug.Log(forceFactor * (endPosition - startPosition));
         return forceFactor * (endPosition - startPosition);
     }
 
@@ -157,17 +156,16 @@ public class DragAim : MonoBehaviour
 
     private Vector3 GetMousePositionPlaneAsWorldCoordinate()
     {
-        // Plane plane = new Plane(Vector3.up, 0.0f);
+        Plane plane = new Plane(Vector3.up, 0.0f);
 
-        // var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        // float distance;
-        // if (plane.Raycast(ray, out distance))
-        // {
-        //     return ray.GetPoint(distance);
-        // }
-        Vector3 mousePos = Input.mousePosition;
-        // Debug.Log(mousePos);
-        return new Vector3(mousePos.x, 0, mousePos.y);
+        float distance;
+        if (plane.Raycast(ray, out distance))
+        {
+            return ray.GetPoint(distance);
+        }
+
+        return Vector3.zero;
     }
 }

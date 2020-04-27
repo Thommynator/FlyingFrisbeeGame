@@ -408,6 +408,8 @@ MonoBehaviour:
   followXAxis: 1
   followYAxis: 0
   followZAxis: 1
+  lerpTime: 0.1
+  useLerp: 0
 --- !u!1 &374506984 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2012409193881759192, guid: 1f538ccb53d93be48a398ca11577c943,
@@ -659,7 +661,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 3, z: -4}
+  m_LocalPosition: {x: 0, y: 2, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 990511125}
@@ -970,7 +972,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 990511124}
-  m_LocalRotation: {x: 0, y: 0.071671575, z: 0, w: 0.9974283}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1, y: 1, z: -18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -978,7 +980,7 @@ Transform:
   - {fileID: 2024391483}
   m_Father: {fileID: 0}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 8.22, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &990511126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -995,6 +997,8 @@ MonoBehaviour:
   followXAxis: 1
   followYAxis: 1
   followZAxis: 1
+  lerpTime: 0.03
+  useLerp: 0
 --- !u!114 &990511127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1864,7 +1868,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2024391482}
   m_LocalRotation: {x: -0.5, y: 0, z: 0, w: 0.8660254}
-  m_LocalPosition: {x: 0, y: 1, z: -3}
+  m_LocalPosition: {x: 0, y: 1, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 990511125}
@@ -2031,7 +2035,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e978affff4155e4180b8565513364cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forceFactor: 0.1
+  forceFactor: 1
 --- !u!64 &2024391488
 MeshCollider:
   m_ObjectHideFlags: 0
