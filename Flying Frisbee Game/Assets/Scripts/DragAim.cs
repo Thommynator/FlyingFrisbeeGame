@@ -85,7 +85,7 @@ public class DragAim : MonoBehaviour
 
     private Vector3 GetThrowDistanceVector()
     {
-        return forceFactor * (startPosition - endPosition);
+        return forceFactor * (endPosition - startPosition);
     }
 
     /// Computes v0 (scalar) that is needed to reach the distance with the given throw angle.
