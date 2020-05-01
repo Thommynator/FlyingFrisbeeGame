@@ -20,6 +20,7 @@ public class FollowFrisbee : MonoBehaviour
     void Start()
     {
         frisbeeObject = GameObject.FindGameObjectWithTag("Frisbee");
+        transform.position = frisbeeObject.transform.position;
     }
 
     // Update is called once per frame
