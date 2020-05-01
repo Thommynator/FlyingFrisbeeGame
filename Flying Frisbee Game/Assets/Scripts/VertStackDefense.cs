@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class VertStackDefense : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class VertStackDefense : MonoBehaviour
     void Update()
     {
         IsPlayerToDefendHoldingTheFrisbee();
-        transform.position = Vector3.Lerp(transform.position, GetDefensePosition(), followSpeed);
+        GetComponent<NavMeshAgent>().SetDestination(GetDefensePosition());
     }
 
     private bool IsPlayerToDefendHoldingTheFrisbee()
