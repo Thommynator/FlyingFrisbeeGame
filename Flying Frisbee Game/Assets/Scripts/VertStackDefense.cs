@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class VertStackDefense : MonoBehaviour
 {
+    public float markDistance = 2.0f;
+
     public GameObject playerToDefend;
 
     private GameObject frisbeeObject;
@@ -39,7 +41,6 @@ public class VertStackDefense : MonoBehaviour
 
     private Vector3 GetDefensePosition()
     {
-        float markDistance = 3.0f;
         Vector3 throwVector = GameObject.Find("AimPlane").GetComponent<DragAim>().GetThrowDistanceVector().normalized;
         Vector3 randomOffset = new Vector3(GetRandomPerlinNoiseValue(), 0, GetRandomPerlinNoiseValue());
 
@@ -72,12 +73,12 @@ public class VertStackDefense : MonoBehaviour
     private float GetRandomPerlinNoiseValue()
     {
         float randomValue = Mathf.PerlinNoise(perlinNoise.x, perlinNoise.y);
-        float stepWidth = 0.001f;
+        float stepWidth = 0.002f;
         perlinNoise += new Vector2(stepWidth, stepWidth);
         if (perlinNoise.x > 1000 || perlinNoise.y > 1000)
         {
             perlinNoise = new Vector2(0, 0);
         }
-        return randomValue;
+        return 2 * (randomValue - 0.5f);
     }
 }

@@ -123,6 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7f70cd1f087d484eabdd0dd03639761, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  markDistance: 3
   playerToDefend: {fileID: 0}
 --- !u!195 &195807435382204424
 NavMeshAgent:
