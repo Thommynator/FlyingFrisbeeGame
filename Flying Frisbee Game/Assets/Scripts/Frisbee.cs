@@ -116,6 +116,11 @@ public class Frisbee : MonoBehaviour
         state = State.FLYING;
     }
 
+    public GameObject GetPlayerHoldingFrisbee()
+    {
+        return playerHoldingTheFrisbee;
+    }
+
     public void IncreaseThrowAngle()
     {
         throwAngleDegree++;
