@@ -121,6 +121,12 @@ public class DragAim : MonoBehaviour
             float horizontalPos = v0 * Mathf.Cos(frisbee.GetComponent<Frisbee>().throwAngleDegree * Mathf.Deg2Rad) * t;
             float verticalPos = v0 * Mathf.Sin(frisbee.GetComponent<Frisbee>().throwAngleDegree * Mathf.Deg2Rad) * t - 0.5f * -Physics.gravity.y * t * t;
 
+            // dont' draw curve indicator line if it's below the ground plane
+            if (verticalPos < -frisbee.transform.position.y)
+            {
+                break;
+            }
+
             GameObject spehre = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             spehre.transform.SetParent(curveIndicator.transform);
             Destroy(spehre.GetComponent<SphereCollider>());

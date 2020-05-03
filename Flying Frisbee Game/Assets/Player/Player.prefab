@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4945922016841623883}
   - component: {fileID: 54732163198612948}
   - component: {fileID: 774432627482644403}
+  - component: {fileID: 3170453134896428175}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -108,7 +109,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 84
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!114 &774432627482644403
 MonoBehaviour:
@@ -124,3 +125,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 8
   canMove: 0
+--- !u!208 &3170453134896428175
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8995218367183600237}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.8, y: 1, z: 0.8}
+  m_MoveThreshold: 0.5
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Frisbee : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class Frisbee : MonoBehaviour
     {
 
         CheckIfOutOfBounds();
+        ToggleNavMeshObstacle();
 
         if (Input.GetMouseButtonDown(1) && state == State.AT_PLAYER)
         {
@@ -116,6 +118,11 @@ public class Frisbee : MonoBehaviour
         state = State.FLYING;
     }
 
+    public GameObject GetPlayerHoldingFrisbee()
+    {
+        return playerHoldingTheFrisbee;
+    }
+
     public void IncreaseThrowAngle()
     {
         throwAngleDegree++;
@@ -128,6 +135,19 @@ public class Frisbee : MonoBehaviour
         throwAngleDegree = Mathf.Clamp(throwAngleDegree, minThrowAngleInDegree, maxThrowAngleInDegree);
     }
 
+    /// While the player is holding the frisbee, the opponents are avoiding it.
+    /// When the frisbee is in the air, opponents are no longer avoiding it. So they are able to block the throw.
+    private void ToggleNavMeshObstacle()
+    {
+        if (state == State.AT_PLAYER)
+        {
+            GetComponent<NavMeshObstacle>().enabled = true;
+        }
+        else
+        {
+            GetComponent<NavMeshObstacle>().enabled = false;
+        }
+    }
     private void SwitchThrowSide()
     {
         if (throwSide == ThrowSide.RIGHT)
