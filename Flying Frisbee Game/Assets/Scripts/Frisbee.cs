@@ -35,7 +35,7 @@ public class Frisbee : MonoBehaviour
     {
 
         CheckIfOutOfBounds();
-        ToggleNavMeshObstacle();
+        ToggleNavMeshObstacleForFrisbee();
 
         if (Input.GetMouseButtonDown(1) && state == State.AT_PLAYER)
         {
@@ -108,7 +108,6 @@ public class Frisbee : MonoBehaviour
     {
         if (playerHoldingTheFrisbee != null)
         {
-            playerHoldingTheFrisbee.GetComponent<PlayerMovement>().canMove = true;
             playerHoldingTheFrisbee = null;
         }
         Destroy(GetComponent<FixedJoint>());
@@ -137,7 +136,7 @@ public class Frisbee : MonoBehaviour
 
     /// While the player is holding the frisbee, the opponents are avoiding it.
     /// When the frisbee is in the air, opponents are no longer avoiding it. So they are able to block the throw.
-    private void ToggleNavMeshObstacle()
+    private void ToggleNavMeshObstacleForFrisbee()
     {
         if (state == State.AT_PLAYER)
         {

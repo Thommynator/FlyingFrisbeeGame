@@ -16,6 +16,8 @@ public class DragAim : MonoBehaviour
 
     private GameObject throwDistanceIndicator;
 
+    private float minimumThrowDistanceThreshold = 1;
+
     /// Multiplies the "drag"-distance, e.g. 10m dragged = 20m thrown 
     public float forceFactor = 0.1f;
 
@@ -37,22 +39,30 @@ public class DragAim : MonoBehaviour
         if (isAiming)
         {
             AdjustThrowAngle();
-
-            // Drag-line for aiming
-            lineRenderer.enabled = true;
             endPosition = GetMousePositionOnPlaneAsWorldCoordinate();
-            lineRenderer.SetPosition(0, startPosition + Vector3.up * 0.5f);
-            lineRenderer.SetPosition(1, endPosition + Vector3.up * 0.5f);
 
-            // horizontal distance indicator on the ground
-            throwDistanceIndicator.GetComponent<MeshRenderer>().enabled = true;
-            float newZ = frisbee.transform.position.z + GetThrowDistanceVector().z;
-            throwDistanceIndicator.transform.position = new Vector3(throwDistanceIndicator.transform.position.x, throwDistanceIndicator.transform.position.y, newZ);
+            if (GetThrowDistanceVector().magnitude > minimumThrowDistanceThreshold)
+            {
+                // Drag-line for aiming
+                lineRenderer.enabled = true;
+                lineRenderer.SetPosition(0, startPosition + Vector3.up * 0.5f);
+                lineRenderer.SetPosition(1, endPosition + Vector3.up * 0.5f);
 
-            // curve indicator
-            Vector3 targetInWorld = GetThrowDistanceVector();
-            float v0 = GetThrowVelocityScalar(targetInWorld.magnitude);
-            DrawThrowCurve(v0);
+                // horizontal distance indicator on the ground
+                throwDistanceIndicator.GetComponent<MeshRenderer>().enabled = true;
+                float newZ = frisbee.transform.position.z + GetThrowDistanceVector().z;
+                throwDistanceIndicator.transform.position = new Vector3(throwDistanceIndicator.transform.position.x, throwDistanceIndicator.transform.position.y, newZ);
+
+                // curve indicator
+                Vector3 targetInWorld = GetThrowDistanceVector();
+                float v0 = GetThrowVelocityScalar(targetInWorld.magnitude);
+                DrawThrowCurve(v0);
+            }
+            else
+            {
+                lineRenderer.enabled = false;
+                throwDistanceIndicator.GetComponent<MeshRenderer>().enabled = false;
+            }
         }
     }
 
@@ -69,7 +79,7 @@ public class DragAim : MonoBehaviour
         {
             deltaDistanceVector = GetThrowDistanceVector();
             // throw frisbee only if mouse moved (dragged) more than a threshold
-            if (deltaDistanceVector.magnitude > 0.1)
+            if (deltaDistanceVector.magnitude > minimumThrowDistanceThreshold)
             {
                 Vector3 velocity = GetThrowVelocityVector(deltaDistanceVector);
                 frisbee.GetComponent<Frisbee>().DetachFromPlayer();
