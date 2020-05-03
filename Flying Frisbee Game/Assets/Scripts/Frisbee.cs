@@ -148,6 +148,7 @@ public class Frisbee : MonoBehaviour
             GetComponent<NavMeshObstacle>().enabled = false;
         }
     }
+
     private void SwitchThrowSide()
     {
         if (throwSide == ThrowSide.RIGHT)
