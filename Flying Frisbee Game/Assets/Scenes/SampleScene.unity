@@ -121,6 +121,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 62439094}
+  - component: {fileID: 62439095}
   m_Layer: 0
   m_Name: Players
   m_TagString: Untagged
@@ -148,6 +149,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &62439095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 62439093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e476b584968c6bb469216217a8c0a750, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  playerMaterial: {fileID: 2100000, guid: aed7b786f1a4631479972c738fd03b06, type: 2}
+  selectedPlayerMaterial: {fileID: 2100000, guid: 4f6f520c32d04dd47a71b73778df07d5,
+    type: 2}
 --- !u!1001 &73008529
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -155,16 +174,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1442765698}
     m_Modifications:
-    - target: {fileID: 114054901175483736, guid: 673e464d878720849867529c821765ce,
-        type: 3}
-      propertyPath: playerToDefend
-      value: 
-      objectReference: {fileID: 933177622}
     - target: {fileID: 7301564130454528794, guid: 673e464d878720849867529c821765ce,
         type: 3}
       propertyPath: m_Name
       value: Opponent (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 114054901175483736, guid: 673e464d878720849867529c821765ce,
+        type: 3}
+      propertyPath: playerToDefend
+      value: 
+      objectReference: {fileID: 933177622}
     - target: {fileID: 6463193665058665668, guid: 673e464d878720849867529c821765ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1150,6 +1169,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1442765698}
     m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7301564130454528794, guid: 673e464d878720849867529c821765ce,
+        type: 3}
+      propertyPath: m_Name
+      value: Opponent (1)
+      objectReference: {fileID: 0}
     - target: {fileID: 114054901175483736, guid: 673e464d878720849867529c821765ce,
         type: 3}
       propertyPath: playerToDefend
@@ -1159,15 +1187,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7301564130454528794, guid: 673e464d878720849867529c821765ce,
-        type: 3}
-      propertyPath: m_Name
-      value: Opponent (1)
       objectReference: {fileID: 0}
     - target: {fileID: 6463193665058665668, guid: 673e464d878720849867529c821765ce,
         type: 3}
@@ -1251,16 +1270,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1442765698}
     m_Modifications:
-    - target: {fileID: 114054901175483736, guid: 673e464d878720849867529c821765ce,
-        type: 3}
-      propertyPath: playerToDefend
-      value: 
-      objectReference: {fileID: 1833258535}
     - target: {fileID: 7301564130454528794, guid: 673e464d878720849867529c821765ce,
         type: 3}
       propertyPath: m_Name
       value: Opponent (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 114054901175483736, guid: 673e464d878720849867529c821765ce,
+        type: 3}
+      propertyPath: playerToDefend
+      value: 
+      objectReference: {fileID: 1833258535}
     - target: {fileID: 6463193665058665668, guid: 673e464d878720849867529c821765ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1585,16 +1604,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1442765698}
     m_Modifications:
-    - target: {fileID: 114054901175483736, guid: 673e464d878720849867529c821765ce,
-        type: 3}
-      propertyPath: playerToDefend
-      value: 
-      objectReference: {fileID: 906894713}
     - target: {fileID: 7301564130454528794, guid: 673e464d878720849867529c821765ce,
         type: 3}
       propertyPath: m_Name
       value: Opponent (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 114054901175483736, guid: 673e464d878720849867529c821765ce,
+        type: 3}
+      propertyPath: playerToDefend
+      value: 
+      objectReference: {fileID: 906894713}
     - target: {fileID: 6463193665058665668, guid: 673e464d878720849867529c821765ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1672,7 +1691,7 @@ PrefabInstance:
     - target: {fileID: 2849438627409306927, guid: c3c299986ca1f8441b2bdc770c0876ff,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.299
       objectReference: {fileID: 0}
     - target: {fileID: 2849438627409306927, guid: c3c299986ca1f8441b2bdc770c0876ff,
         type: 3}
@@ -2451,16 +2470,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1442765698}
     m_Modifications:
-    - target: {fileID: 114054901175483736, guid: 673e464d878720849867529c821765ce,
-        type: 3}
-      propertyPath: playerToDefend
-      value: 
-      objectReference: {fileID: 602500874}
     - target: {fileID: 7301564130454528794, guid: 673e464d878720849867529c821765ce,
         type: 3}
       propertyPath: m_Name
       value: Opponent (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 114054901175483736, guid: 673e464d878720849867529c821765ce,
+        type: 3}
+      propertyPath: playerToDefend
+      value: 
+      objectReference: {fileID: 602500874}
     - target: {fileID: 6463193665058665668, guid: 673e464d878720849867529c821765ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2525,6 +2544,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1442765698}
     m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7301564130454528794, guid: 673e464d878720849867529c821765ce,
+        type: 3}
+      propertyPath: m_Name
+      value: Opponent
+      objectReference: {fileID: 0}
     - target: {fileID: 114054901175483736, guid: 673e464d878720849867529c821765ce,
         type: 3}
       propertyPath: playerToDefend
@@ -2534,15 +2562,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7301564130454528794, guid: 673e464d878720849867529c821765ce,
-        type: 3}
-      propertyPath: m_Name
-      value: Opponent
       objectReference: {fileID: 0}
     - target: {fileID: 6463193665058665668, guid: 673e464d878720849867529c821765ce,
         type: 3}
@@ -2622,7 +2641,7 @@ PrefabInstance:
     - target: {fileID: 8995218367183600237, guid: c3c299986ca1f8441b2bdc770c0876ff,
         type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8995218367183600237, guid: c3c299986ca1f8441b2bdc770c0876ff,
         type: 3}
