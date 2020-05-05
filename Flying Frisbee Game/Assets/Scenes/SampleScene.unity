@@ -161,9 +161,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e476b584968c6bb469216217a8c0a750, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask:
+  minimapCamera: {fileID: 1881570334}
+  playerLayerMask:
     serializedVersion: 2
     m_Bits: 1024
+  minimapLayerMask:
+    serializedVersion: 2
+    m_Bits: 32
   playerMaterial: {fileID: 2100000, guid: aed7b786f1a4631479972c738fd03b06, type: 2}
   selectedPlayerMaterial: {fileID: 2100000, guid: 4f6f520c32d04dd47a71b73778df07d5,
     type: 2}
