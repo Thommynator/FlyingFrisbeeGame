@@ -20,15 +20,15 @@ public class FollowFrisbee : MonoBehaviour
     void Start()
     {
         frisbeeObject = GameObject.FindGameObjectWithTag("Frisbee");
-        transform.position = frisbeeObject.transform.position;
+        transform.position = frisbeeObject.transform.position + offset;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float x = followXAxis ? useLerp ? Vector3.Lerp(transform.position, frisbeeObject.transform.position, lerpTime).x : frisbeeObject.transform.position.x : transform.position.x;
-        float y = followYAxis ? useLerp ? Vector3.Lerp(transform.position, frisbeeObject.transform.position, lerpTime).y : frisbeeObject.transform.position.y : transform.position.y;
-        float z = followZAxis ? useLerp ? Vector3.Lerp(transform.position, frisbeeObject.transform.position, lerpTime).z : frisbeeObject.transform.position.z : transform.position.z;
-        transform.position = new Vector3(x, y, z) + offset;
+        float x = followXAxis ? useLerp ? Vector3.Lerp(transform.position, frisbeeObject.transform.position + offset, lerpTime).x : frisbeeObject.transform.position.x + offset.x : transform.position.x;
+        float y = followYAxis ? useLerp ? Vector3.Lerp(transform.position, frisbeeObject.transform.position + offset, lerpTime).y : frisbeeObject.transform.position.y + offset.y : transform.position.y;
+        float z = followZAxis ? useLerp ? Vector3.Lerp(transform.position, frisbeeObject.transform.position + offset, lerpTime).z : frisbeeObject.transform.position.z + offset.z : transform.position.z;
+        transform.position = new Vector3(x, y, z);
     }
 }
