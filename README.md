@@ -4,6 +4,13 @@ With this little Ultimate Frisbee game I want to get more familiar with Unity.
 
 ## Changelog
 
+### 07.05.2020
+* New minimap in the top-left of the screen
+* Opponents are defending the frisbee, reacting on the aim of the player
+* Players can be selected by clicking on them
+
+![](demo4.gif)
+
 ### 28.04.2020
 More dynamic camera movement:
 * Camera is much closer to the player, like 3rd person view
