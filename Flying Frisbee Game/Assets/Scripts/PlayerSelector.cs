@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class PlayerSelector : MonoBehaviour
 {
-
-    public Camera minimapCamera;
     /// layer used for raycast detection
     public LayerMask playerLayerMask;
-    public LayerMask minimapLayerMask;
     public Material playerMaterial;
     public Material selectedPlayerMaterial;
 
@@ -37,12 +34,6 @@ public class PlayerSelector : MonoBehaviour
                     SelectPlayer(hitPlayer);
                 }
             }
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, minimapLayerMask))
-            // clicked on player in minimap?
-            {
-                Debug.Log(hit.collider.name);
-            }
-
         }
     }
 

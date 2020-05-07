@@ -165,9 +165,6 @@ MonoBehaviour:
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 1024
-  minimapLayerMask:
-    serializedVersion: 2
-    m_Bits: 32
   playerMaterial: {fileID: 2100000, guid: aed7b786f1a4631479972c738fd03b06, type: 2}
   selectedPlayerMaterial: {fileID: 2100000, guid: 4f6f520c32d04dd47a71b73778df07d5,
     type: 2}
@@ -2470,7 +2467,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 101
+  field of view: 63
   orthographic: 1
   orthographic size: 14.23
   m_Depth: 0
