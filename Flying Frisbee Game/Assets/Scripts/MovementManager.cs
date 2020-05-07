@@ -37,8 +37,8 @@ public class MovementManager : MonoBehaviour
         offsetFrisbeeToCameraRigPosition = frisbee.transform.position - mainCameraRig.transform.position;
         initialCameraRigRotation = mainCameraRig.transform.rotation;
 
-        targetTopViewPosition = new Vector3(0, 30, -1);
-        targetTopViewRotation = Quaternion.Euler(70, 0, 0);
+        targetTopViewPosition = new Vector3(0, 15, -1);
+        targetTopViewRotation = Quaternion.Euler(70, -90, 0);
 
     }
 
