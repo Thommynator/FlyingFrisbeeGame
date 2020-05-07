@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class PlayerSelector : MonoBehaviour
 {
-
     /// layer used for raycast detection
-    public LayerMask layerMask;
-
+    public LayerMask playerLayerMask;
     public Material playerMaterial;
     public Material selectedPlayerMaterial;
 
@@ -25,7 +23,8 @@ public class PlayerSelector : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, layerMask))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, playerLayerMask))
+            // clicked on player in world?
             {
                 if (hit.transform.gameObject.tag == "Player")
                 {
@@ -39,7 +38,7 @@ public class PlayerSelector : MonoBehaviour
     }
 
     /// Sets the "canMove" property of all players to false and assigns the default player material to them.
-    private void DeselectAllPlayers()
+    public void DeselectAllPlayers()
     {
         foreach (Transform child in transform)
         {

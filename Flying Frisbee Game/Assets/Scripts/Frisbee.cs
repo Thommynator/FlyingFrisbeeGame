@@ -21,11 +21,14 @@ public class Frisbee : MonoBehaviour
     private float minThrowAngleInDegree = 10.0f;
     private float maxThrowAngleInDegree = 55f;
 
+    private PlayerSelector playerSelector;
+
 
     // Start is called before the first frame update
     void Start()
     {
         frisbeeObject = GameObject.FindGameObjectWithTag("Frisbee");
+        playerSelector = GameObject.Find("Players").GetComponent<PlayerSelector>();
         throwSide = ThrowSide.RIGHT;
         AttachToPlayer(GameObject.Find("Player"), throwSide);
     }
@@ -84,6 +87,7 @@ public class Frisbee : MonoBehaviour
     public void AttachToPlayer(GameObject player, ThrowSide throwSide)
     {
         DetachFromPlayer();
+        playerSelector.DeselectAllPlayers();
 
         state = State.AT_PLAYER;
         playerHoldingTheFrisbee = player;
