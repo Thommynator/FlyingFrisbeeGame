@@ -16,7 +16,7 @@ public class MovementManager : MonoBehaviour
 
     private bool isInManagerView;
 
-    private float lerpSpeed = 0.15f;
+    private float lerpSpeed = 0.1f;
 
     private GameObject frisbee;
 
@@ -28,7 +28,6 @@ public class MovementManager : MonoBehaviour
     void Start()
     {
         GameEvents.current.onMovementManagerEnter += StartMoveCameraToTopView;
-        GameEvents.current.onMovementManagerExit += StartMoveCameraToPlayView;
 
         frisbee = GameObject.FindGameObjectWithTag("Frisbee");
         minimapImage = GameObject.Find("MinimapImage");
@@ -50,12 +49,6 @@ public class MovementManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             isInManagerView = !isInManagerView;
-            Debug.Log(isInManagerView);
-
-            if (currentMoveCoroutine != null)
-            {
-                StopCoroutine(currentMoveCoroutine);
-            }
 
             if (isInManagerView)
             {
@@ -63,30 +56,9 @@ public class MovementManager : MonoBehaviour
             }
             else
             {
-                GameEvents.current.MovementManagerExit();
+                StartMoveCameraToPlayView();
             }
         }
-    }
-
-    /// Triggers the coroutine to move the camera to the player (normal) view
-    private void StartMoveCameraToPlayView()
-    {
-        minimapImage.GetComponent<RawImage>().enabled = true;
-
-        currentMoveCoroutine = MoveCameraToPlayView();
-        StartCoroutine(currentMoveCoroutine);
-    }
-    private IEnumerator MoveCameraToPlayView()
-    {
-        while (Vector3.Distance(mainCameraRig.transform.position, offsetFrisbeeToCameraRigPosition) > 0.05f)
-        {
-            Vector3 targetPosition = frisbee.transform.position + offsetFrisbeeToCameraRigPosition;
-            Debug.Log(Vector3.Distance(mainCameraRig.transform.position, targetPosition));
-            mainCameraRig.transform.position = Vector3.Lerp(mainCameraRig.transform.position, targetPosition, lerpSpeed);
-            mainCameraRig.transform.rotation = Quaternion.Lerp(mainCameraRig.transform.rotation, initialCameraRigRotation, lerpSpeed);
-            yield return null;
-        }
-        Debug.Log("Moved camera to play view");
     }
 
     /// Triggers the coroutine to move the camera to the top (manager) view
@@ -94,18 +66,48 @@ public class MovementManager : MonoBehaviour
     {
         minimapImage.GetComponent<RawImage>().enabled = false;
 
+        if (currentMoveCoroutine != null)
+        {
+            StopCoroutine(currentMoveCoroutine);
+        }
+
         currentMoveCoroutine = MoveCameraToTopView();
         StartCoroutine(currentMoveCoroutine);
     }
     private IEnumerator MoveCameraToTopView()
     {
-        while (mainCameraRig.transform.position != targetTopViewPosition)
+        while (Vector3.Distance(mainCameraRig.transform.position, targetTopViewPosition) > 0.001f)
         {
-            Debug.Log(Vector3.Distance(mainCameraRig.transform.position, targetTopViewPosition));
             mainCameraRig.transform.position = Vector3.Lerp(mainCameraRig.transform.position, targetTopViewPosition, lerpSpeed);
             mainCameraRig.transform.rotation = Quaternion.Lerp(mainCameraRig.transform.rotation, targetTopViewRotation, lerpSpeed);
             yield return null;
         }
-        Debug.Log("Moved camera to top view");
+        Debug.Log("Moved camera to Movement Manager view");
+    }
+
+    /// Triggers the coroutine to move the camera to the player (normal) view
+    private void StartMoveCameraToPlayView()
+    {
+        minimapImage.GetComponent<RawImage>().enabled = true;
+
+        if (currentMoveCoroutine != null)
+        {
+            StopCoroutine(currentMoveCoroutine);
+        }
+
+        currentMoveCoroutine = MoveCameraToPlayView();
+        StartCoroutine(currentMoveCoroutine);
+    }
+    private IEnumerator MoveCameraToPlayView()
+    {
+        Vector3 targetPosition = frisbee.transform.position + offsetFrisbeeToCameraRigPosition;
+        while (Vector3.Distance(mainCameraRig.transform.position, targetPosition) > 0.001f)
+        {
+            mainCameraRig.transform.position = Vector3.Lerp(mainCameraRig.transform.position, targetPosition, lerpSpeed);
+            mainCameraRig.transform.rotation = Quaternion.Lerp(mainCameraRig.transform.rotation, initialCameraRigRotation, lerpSpeed);
+            yield return null;
+        }
+        Debug.Log("Moved camera to play view");
+        GameEvents.current.MovementManagerExit();
     }
 }
