@@ -9,6 +9,7 @@ public class DragAim : MonoBehaviour
     Vector3 endPosition;
     Vector3 deltaDistanceVector;
     private bool isAiming = false;
+    private bool isAimingAllowed = true;
 
     private GameObject frisbee;
 
@@ -24,7 +25,11 @@ public class DragAim : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameEvents.current.onMovementManagerEnter += PreventAiming;
+        GameEvents.current.onMovementManagerExit += AllowAiming;
+
         isAiming = false;
+        isAimingAllowed = true;
 
         frisbee = GameObject.FindGameObjectWithTag("Frisbee");
         lineRenderer = GetComponent<LineRenderer>();
@@ -36,7 +41,7 @@ public class DragAim : MonoBehaviour
     void Update()
     {
 
-        if (isAiming)
+        if (isAimingAllowed && isAiming)
         {
             AdjustThrowAngle();
             endPosition = GetMousePositionOnPlaneAsWorldCoordinate();
@@ -68,32 +73,48 @@ public class DragAim : MonoBehaviour
 
     void OnMouseDown()
     {
-        isAiming = true;
-        startPosition = GetMousePositionOnPlaneAsWorldCoordinate();
+        if (isAimingAllowed)
+        {
+            isAiming = true;
+            startPosition = GetMousePositionOnPlaneAsWorldCoordinate();
+        }
     }
 
     void OnMouseUp()
     {
-        isAiming = false;
-        if (startPosition != Vector3.zero && endPosition != Vector3.zero)
+        if (isAimingAllowed)
         {
-            deltaDistanceVector = GetThrowDistanceVector();
-            // throw frisbee only if mouse moved (dragged) more than a threshold
-            if (deltaDistanceVector.magnitude > minimumThrowDistanceThreshold)
+            isAiming = false;
+            if (startPosition != Vector3.zero && endPosition != Vector3.zero)
             {
-                Vector3 velocity = GetThrowVelocityVector(deltaDistanceVector);
-                frisbee.GetComponent<Frisbee>().DetachFromPlayer();
-                frisbee.GetComponent<Rigidbody>().AddForce(velocity, ForceMode.VelocityChange);
+                deltaDistanceVector = GetThrowDistanceVector();
+                // throw frisbee only if mouse moved (dragged) more than a threshold
+                if (deltaDistanceVector.magnitude > minimumThrowDistanceThreshold)
+                {
+                    Vector3 velocity = GetThrowVelocityVector(deltaDistanceVector);
+                    frisbee.GetComponent<Frisbee>().DetachFromPlayer();
+                    frisbee.GetComponent<Rigidbody>().AddForce(velocity, ForceMode.VelocityChange);
+                }
             }
-        }
 
-        lineRenderer.enabled = false;
-        throwDistanceIndicator.GetComponent<MeshRenderer>().enabled = false;
+            lineRenderer.enabled = false;
+            throwDistanceIndicator.GetComponent<MeshRenderer>().enabled = false;
+        }
     }
 
     public Vector3 GetThrowDistanceVector()
     {
         return forceFactor * (endPosition - startPosition);
+    }
+
+    private void AllowAiming()
+    {
+        isAimingAllowed = true;
+    }
+
+    private void PreventAiming()
+    {
+        isAimingAllowed = false;
     }
 
     /// Computes v0 (scalar) that is needed to reach the distance with the given throw angle.
