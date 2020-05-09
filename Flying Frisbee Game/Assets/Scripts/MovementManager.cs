@@ -27,7 +27,7 @@ public class MovementManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameEvents.current.onMovementManagerEnter += StartMoveCameraToTopView;
+        GameEvents.current.onMovementManagerEnter += StartMovementManager;
 
         frisbee = GameObject.FindGameObjectWithTag("Frisbee");
         minimapImage = GameObject.Find("MinimapImage");
@@ -37,7 +37,7 @@ public class MovementManager : MonoBehaviour
         offsetFrisbeeToCameraRigPosition = frisbee.transform.position - mainCameraRig.transform.position;
         initialCameraRigRotation = mainCameraRig.transform.rotation;
 
-        targetTopViewPosition = new Vector3(0, 15, -1);
+        targetTopViewPosition = new Vector3(0, 15, 0);
         targetTopViewRotation = Quaternion.Euler(70, -90, 0);
 
     }
@@ -56,15 +56,18 @@ public class MovementManager : MonoBehaviour
             }
             else
             {
-                StartMoveCameraToPlayView();
+                ExitMovementManager();
             }
         }
     }
 
     /// Triggers the coroutine to move the camera to the top (manager) view
-    private void StartMoveCameraToTopView()
+    private void StartMovementManager()
     {
         minimapImage.GetComponent<RawImage>().enabled = false;
+
+        // stop physics temporarily
+        Time.timeScale = 0;
 
         if (currentMoveCoroutine != null)
         {
@@ -86,9 +89,12 @@ public class MovementManager : MonoBehaviour
     }
 
     /// Triggers the coroutine to move the camera to the player (normal) view
-    private void StartMoveCameraToPlayView()
+    private void ExitMovementManager()
     {
         minimapImage.GetComponent<RawImage>().enabled = true;
+
+        // continue physics
+        Time.timeScale = 1;
 
         if (currentMoveCoroutine != null)
         {
@@ -101,7 +107,7 @@ public class MovementManager : MonoBehaviour
     private IEnumerator MoveCameraToPlayView()
     {
         Vector3 targetPosition = frisbee.transform.position + offsetFrisbeeToCameraRigPosition;
-        while (Vector3.Distance(mainCameraRig.transform.position, targetPosition) > 0.001f)
+        while (Vector3.Distance(mainCameraRig.transform.position, targetPosition) > 1f)
         {
             mainCameraRig.transform.position = Vector3.Lerp(mainCameraRig.transform.position, targetPosition, lerpSpeed);
             mainCameraRig.transform.rotation = Quaternion.Lerp(mainCameraRig.transform.rotation, initialCameraRigRotation, lerpSpeed);
