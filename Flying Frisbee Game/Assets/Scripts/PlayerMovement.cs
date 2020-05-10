@@ -8,12 +8,12 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 8;
     public bool canMove;
 
-    public GameObject waypointPrefab;
-    public List<Vector3> plannedPath;
     private bool canPlanPath;
     private NavMeshAgent navMeshAgent;
 
     private PlayerSelector playerSelector;
+
+    private WaypointManager waypointManager;
 
     // Start is called before the first frame update
     void Start()
@@ -23,37 +23,53 @@ public class PlayerMovement : MonoBehaviour
 
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerSelector = gameObject.GetComponentInParent<PlayerSelector>();
+        waypointManager = gameObject.GetComponentInChildren<WaypointManager>();
         canPlanPath = false;
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (canPlanPath && IsPlayerSelected())
         {
-            AddNewWaypoint(GetMousePositionOnPlaneAsWorldCoordinate());
+            if (Input.GetMouseButtonDown(0))
+            {
+                waypointManager.AddNewWaypoint(GetMousePositionOnPlaneAsWorldCoordinate());
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                waypointManager.RemoveLastWaypoint();
+            }
         }
-        else if (Input.GetMouseButtonDown(1))
-        {
-            RemoveLastWaypoint();
-        }
+        waypointManager.VisualizeWaypoints(IsPlayerSelected());
+
     }
 
     void FixedUpdate()
     {
+        // manual movement
         if (canMove)
         {
             Vector3 velocity = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized * moveSpeed;
             navMeshAgent.Move(velocity * Time.deltaTime);
         }
 
-
-        if (plannedPath != null && plannedPath.Count > 0)
+        // automated movement to waypoints
+        try
         {
-            GetComponent<NavMeshAgent>().SetDestination(plannedPath[0]);
-            if (Vector3.Distance(transform.position, plannedPath[0]) < 2)
+            if (waypointManager.IsWaypointAvailable())
             {
-                plannedPath.RemoveAt(0);
+                Vector3 nextWaypoint = waypointManager.GetNextWaypoint();
+                GetComponent<NavMeshAgent>().SetDestination(nextWaypoint);
+                if (Vector3.Distance(transform.position, nextWaypoint) < 2)
+                {
+                    waypointManager.RemoveNextWaypoint();
+                }
+
             }
+        }
+        catch (WaypointManager.NoWaypointAvailableException)
+        {
+            // do nothing
         }
     }
 
@@ -65,25 +81,6 @@ public class PlayerMovement : MonoBehaviour
     private void DisablePathPlanning()
     {
         canPlanPath = false;
-    }
-
-    private void AddNewWaypoint(Vector3 position)
-    {
-        if (canPlanPath && isPlayerSelected())
-        {
-            plannedPath.Add(position);
-        }
-    }
-
-    private void RemoveLastWaypoint()
-    {
-        if (canPlanPath && isPlayerSelected())
-        {
-            if (plannedPath.Count > 0)
-            {
-                plannedPath.RemoveAt(plannedPath.Count - 1);
-            }
-        }
     }
 
     private Vector3 GetMousePositionOnPlaneAsWorldCoordinate()
@@ -101,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
         return Vector3.zero;
     }
 
-    private bool isPlayerSelected()
+    private bool IsPlayerSelected()
     {
         return GameObject.ReferenceEquals(playerSelector.GetSelectedPlayer(), this.gameObject);
     }
