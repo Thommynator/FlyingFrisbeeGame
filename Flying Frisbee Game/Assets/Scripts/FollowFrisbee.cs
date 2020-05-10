@@ -21,8 +21,8 @@ public class FollowFrisbee : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameEvents.current.onMovementManagerEnter += DisableFollowing;
-        GameEvents.current.onMovementManagerExit += EnableFollowing;
+        GameEvents.current.onMovementManagerEnter += () => { isFollowingEnabled = false; };
+        GameEvents.current.onMovementManagerExit += () => { isFollowingEnabled = true; };
 
         isFollowingEnabled = true;
         frisbeeObject = GameObject.FindGameObjectWithTag("Frisbee");
@@ -39,15 +39,5 @@ public class FollowFrisbee : MonoBehaviour
             float z = followZAxis ? useLerp ? Vector3.Lerp(transform.position, frisbeeObject.transform.position + offset, lerpTime).z : frisbeeObject.transform.position.z + offset.z : transform.position.z;
             transform.position = new Vector3(x, y, z);
         }
-    }
-
-    private void EnableFollowing()
-    {
-        isFollowingEnabled = true;
-    }
-
-    private void DisableFollowing()
-    {
-        isFollowingEnabled = false;
     }
 }

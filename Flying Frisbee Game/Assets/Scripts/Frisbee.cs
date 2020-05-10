@@ -24,10 +24,16 @@ public class Frisbee : MonoBehaviour
 
     private PlayerSelector playerSelector;
 
+    private bool isMovementManagerActive = false;
+
 
     // Start is called before the first frame update
     void Start()
     {
+
+        GameEvents.current.onMovementManagerEnter += () => { isMovementManagerActive = true; };
+        GameEvents.current.onMovementManagerExit += () => { isMovementManagerActive = false; };
+
         frisbeeObject = GameObject.FindGameObjectWithTag("Frisbee");
         playerSelector = GameObject.Find("Players").GetComponent<PlayerSelector>();
         throwSide = ThrowSide.RIGHT;
@@ -155,15 +161,18 @@ public class Frisbee : MonoBehaviour
 
     private void SwitchThrowSide()
     {
-        if (throwSide == ThrowSide.RIGHT)
+        if (!isMovementManagerActive)
         {
-            throwSide = ThrowSide.LEFT;
+            if (throwSide == ThrowSide.RIGHT)
+            {
+                throwSide = ThrowSide.LEFT;
+            }
+            else if (throwSide == ThrowSide.LEFT)
+            {
+                throwSide = ThrowSide.RIGHT;
+            }
+            AttachToPlayer(playerHoldingTheFrisbee, throwSide);
         }
-        else if (throwSide == ThrowSide.LEFT)
-        {
-            throwSide = ThrowSide.RIGHT;
-        }
-        AttachToPlayer(playerHoldingTheFrisbee, throwSide);
     }
 
     private bool CheckIfOutOfBounds()

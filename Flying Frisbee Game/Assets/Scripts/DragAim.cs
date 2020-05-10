@@ -25,8 +25,8 @@ public class DragAim : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameEvents.current.onMovementManagerEnter += PreventAiming;
-        GameEvents.current.onMovementManagerExit += AllowAiming;
+        GameEvents.current.onMovementManagerEnter += () => { isAimingAllowed = false; };
+        GameEvents.current.onMovementManagerExit += () => { isAimingAllowed = true; };
 
         isAiming = false;
         isAimingAllowed = true;
@@ -105,16 +105,6 @@ public class DragAim : MonoBehaviour
     public Vector3 GetThrowDistanceVector()
     {
         return forceFactor * (endPosition - startPosition);
-    }
-
-    private void AllowAiming()
-    {
-        isAimingAllowed = true;
-    }
-
-    private void PreventAiming()
-    {
-        isAimingAllowed = false;
     }
 
     /// Computes v0 (scalar) that is needed to reach the distance with the given throw angle.

@@ -19,8 +19,8 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameEvents.current.onMovementManagerEnter += EnablePathPlanning;
-        GameEvents.current.onMovementManagerExit += DisablePathPlanning;
+        GameEvents.current.onMovementManagerEnter += () => { canPlanPath = true; };
+        GameEvents.current.onMovementManagerExit += () => { canPlanPath = false; };
 
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerSelector = gameObject.GetComponentInParent<PlayerSelector>();
@@ -79,16 +79,6 @@ public class PlayerMovement : MonoBehaviour
         {
             // do nothing
         }
-    }
-
-    private void EnablePathPlanning()
-    {
-        canPlanPath = true;
-    }
-
-    private void DisablePathPlanning()
-    {
-        canPlanPath = false;
     }
 
     private Vector3 GetMousePositionOnPlaneAsWorldCoordinate()
