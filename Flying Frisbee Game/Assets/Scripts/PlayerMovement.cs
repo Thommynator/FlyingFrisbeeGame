@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -33,7 +34,14 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                waypointManager.AddNewWaypoint(GetMousePositionOnPlaneAsWorldCoordinate());
+                try
+                {
+                    waypointManager.AddNewWaypoint(GetMousePositionOnPlaneAsWorldCoordinate());
+                }
+                catch (NoHitOnGroundPlaneException ex)
+                {
+                    Debug.Log(ex.Message);
+                }
             }
             else if (Input.GetMouseButtonDown(1))
             {
@@ -87,20 +95,27 @@ public class PlayerMovement : MonoBehaviour
     {
         Plane plane = new Plane(Vector3.up, 0.0f);
 
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        float distance;
-        if (plane.Raycast(ray, out distance))
+        RaycastHit hitInfo;
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo))
         {
-            return ray.GetPoint(distance);
+            if (hitInfo.collider.name == "GroundPlane")
+            {
+                return hitInfo.point;
+            }
         }
 
-        return Vector3.zero;
+        // throw exception if player did not click on the ground plane (e.g. selected a player)
+        throw new NoHitOnGroundPlaneException("Player didn't click on the ground plane.");
     }
 
     private bool IsPlayerSelected()
     {
         return GameObject.ReferenceEquals(playerSelector.GetSelectedPlayer(), this.gameObject);
+    }
+
+    public class NoHitOnGroundPlaneException : Exception
+    {
+        public NoHitOnGroundPlaneException(string message) : base(message) { }
     }
 
 }
