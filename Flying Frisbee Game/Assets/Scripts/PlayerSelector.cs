@@ -8,13 +8,14 @@ public class PlayerSelector : MonoBehaviour
     public LayerMask playerLayerMask;
     public Material playerMaterial;
     public Material selectedPlayerMaterial;
-
     private GameObject frisbee;
+    private GameObject selectedPlayer;
 
     // Start is called before the first frame update
     void Start()
     {
         frisbee = GameObject.FindGameObjectWithTag("Frisbee");
+        selectedPlayer = null;
     }
 
     // Update is called once per frame
@@ -37,6 +38,12 @@ public class PlayerSelector : MonoBehaviour
         }
     }
 
+    /// Returns the currently selected player. Can be null if none is selected.
+    public GameObject GetSelectedPlayer()
+    {
+        return selectedPlayer;
+    }
+
     /// Sets the "canMove" property of all players to false and assigns the default player material to them.
     public void DeselectAllPlayers()
     {
@@ -44,6 +51,7 @@ public class PlayerSelector : MonoBehaviour
         {
             child.gameObject.GetComponent<PlayerMovement>().canMove = false;
             child.gameObject.GetComponent<MeshRenderer>().material = playerMaterial;
+            selectedPlayer = null;
         }
     }
 
@@ -54,6 +62,8 @@ public class PlayerSelector : MonoBehaviour
         {
             player.GetComponent<PlayerMovement>().canMove = true;
             player.GetComponent<MeshRenderer>().material = selectedPlayerMaterial;
+            selectedPlayer = player;
         }
     }
+
 }

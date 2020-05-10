@@ -19,6 +19,7 @@ public class Frisbee : MonoBehaviour
     public ThrowSide throwSide;
 
     private float minThrowAngleInDegree = 10.0f;
+
     private float maxThrowAngleInDegree = 55f;
 
     private PlayerSelector playerSelector;
