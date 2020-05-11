@@ -10,23 +10,23 @@ public class DragAim : MonoBehaviour
     Vector3 deltaDistanceVector;
     private bool isAiming = false;
     private bool isAimingAllowed = true;
-
     private GameObject frisbee;
-
     private LineRenderer lineRenderer;
-
     private GameObject throwDistanceIndicator;
-
     private float minimumThrowDistanceThreshold = 1;
 
     /// Multiplies the "drag"-distance, e.g. 10m dragged = 20m thrown 
     public float forceFactor = 0.1f;
 
-    // Start is called before the first frame update
+    private Camera mainCamera;
+
     void Start()
     {
         GameEvents.current.onMovementManagerEnter += () => { isAimingAllowed = false; };
         GameEvents.current.onMovementManagerExit += () => { isAimingAllowed = true; };
+
+        // assign it only once in the beginning to save performance during game
+        mainCamera = Camera.main;
 
         isAiming = false;
         isAimingAllowed = true;
@@ -37,7 +37,6 @@ public class DragAim : MonoBehaviour
         throwDistanceIndicator.GetComponent<MeshRenderer>().enabled = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -185,7 +184,7 @@ public class DragAim : MonoBehaviour
     {
         Plane plane = new Plane(Vector3.up, 0.0f);
 
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
         float distance;
         if (plane.Raycast(ray, out distance))

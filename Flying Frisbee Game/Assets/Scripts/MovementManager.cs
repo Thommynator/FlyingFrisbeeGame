@@ -79,7 +79,7 @@ public class MovementManager : MonoBehaviour
     }
     private IEnumerator MoveCameraToTopView()
     {
-        while (Vector3.Distance(mainCameraRig.transform.position, targetTopViewPosition) > 0.001f)
+        while ((mainCameraRig.transform.position - targetTopViewPosition).sqrMagnitude > 0.001f)
         {
             mainCameraRig.transform.position = Vector3.Lerp(mainCameraRig.transform.position, targetTopViewPosition, lerpSpeed);
             mainCameraRig.transform.rotation = Quaternion.Lerp(mainCameraRig.transform.rotation, targetTopViewRotation, lerpSpeed);
@@ -107,7 +107,7 @@ public class MovementManager : MonoBehaviour
     private IEnumerator MoveCameraToPlayView()
     {
         Vector3 targetPosition = frisbee.transform.position + offsetFrisbeeToCameraRigPosition;
-        while (Vector3.Distance(mainCameraRig.transform.position, targetPosition) > 1f)
+        while ((mainCameraRig.transform.position - targetPosition).sqrMagnitude > 1f)
         {
             mainCameraRig.transform.position = Vector3.Lerp(mainCameraRig.transform.position, targetPosition, lerpSpeed);
             mainCameraRig.transform.rotation = Quaternion.Lerp(mainCameraRig.transform.rotation, initialCameraRigRotation, lerpSpeed);

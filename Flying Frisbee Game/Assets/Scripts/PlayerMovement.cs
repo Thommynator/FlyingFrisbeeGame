@@ -16,11 +16,16 @@ public class PlayerMovement : MonoBehaviour
 
     private WaypointManager waypointManager;
 
+    private Camera mainCamera;
+
     // Start is called before the first frame update
     void Start()
     {
         GameEvents.current.onMovementManagerEnter += () => { canPlanPath = true; };
         GameEvents.current.onMovementManagerExit += () => { canPlanPath = false; };
+
+        // assign it only once in the beginning to save performance during game
+        mainCamera = Camera.main;
 
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerSelector = gameObject.GetComponentInParent<PlayerSelector>();
@@ -69,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Vector3 nextWaypoint = waypointManager.GetNextWaypoint();
             GetComponent<NavMeshAgent>().SetDestination(nextWaypoint);
-            if (Vector3.Distance(transform.position, nextWaypoint) < 2)
+            if ((transform.position - nextWaypoint).sqrMagnitude < 4)
             {
                 waypointManager.RemoveNextWaypoint();
             }
@@ -85,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
         Plane plane = new Plane(Vector3.up, 0.0f);
 
         RaycastHit hitInfo;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo))
+        if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo))
         {
             if (hitInfo.collider.name == "GroundPlane")
             {
