@@ -72,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
         // automated movement to waypoints
         try
         {
-            Vector3 nextWaypoint = waypointManager.GetNextWaypoint();
+            Vector3 nextWaypoint = waypointManager.GetNextWaypointPosition();
             GetComponent<NavMeshAgent>().SetDestination(nextWaypoint);
             if ((transform.position - nextWaypoint).sqrMagnitude < 4)
             {

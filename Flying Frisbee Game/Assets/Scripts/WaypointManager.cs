@@ -2,24 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using TMPro;
 
 public class WaypointManager : MonoBehaviour
 {
-
-    public List<Vector3> waypointPositions = new List<Vector3>();
-
     public GameObject waypointPrefab;
+    public List<GameObject> waypoints = new List<GameObject>();
 
     public bool IsWaypointAvailable()
     {
-        return waypointPositions.Count > 0;
+        return waypoints.Count > 0;
     }
 
-    public Vector3 GetNextWaypoint()
+    public Vector3 GetNextWaypointPosition()
     {
         if (IsWaypointAvailable())
         {
-            return waypointPositions[0];
+            return waypoints[0].transform.position;
         }
         throw new NoWaypointAvailableException();
     }
@@ -28,35 +27,45 @@ public class WaypointManager : MonoBehaviour
     {
         if (IsWaypointAvailable())
         {
-            waypointPositions.RemoveAt(0);
+            Destroy(waypoints[0].gameObject);
+            waypoints.RemoveAt(0);
         }
     }
 
     public void AddNewWaypoint(Vector3 position)
     {
-        waypointPositions.Add(position);
+        waypoints.Add(GameObject.Instantiate(waypointPrefab, position, Quaternion.identity));
     }
 
     public void RemoveLastWaypoint()
     {
         if (IsWaypointAvailable())
         {
-            waypointPositions.RemoveAt(waypointPositions.Count - 1);
+            int index = waypoints.Count - 1;
+            Destroy(waypoints[index].gameObject);
+            waypoints.RemoveAt(waypoints.Count - 1);
         }
     }
 
     public void VisualizeWaypoints(bool show)
     {
-        foreach (Transform waypoint in transform)
+        for (int i = 0; i < waypoints.Count; i++)
         {
-            GameObject.Destroy(waypoint.gameObject);
-        }
-        if (show)
-        {
-            foreach (Vector3 waypointPosition in waypointPositions)
+            if (show)
             {
-                GameObject waypoint = GameObject.Instantiate(waypointPrefab, waypointPosition, Quaternion.identity);
-                waypoint.transform.parent = this.transform;
+                // show waypoint
+                waypoints[i].GetComponent<MeshRenderer>().enabled = true;
+
+                // show number above waypoint
+                waypoints[i].GetComponentInChildren<TextMeshProUGUI>().enabled = true;
+                waypoints[i].GetComponentInChildren<TextMeshProUGUI>().SetText((i + 1).ToString());
+
+            }
+            else
+            {
+                // hide waypoint and number
+                waypoints[i].GetComponent<MeshRenderer>().enabled = false;
+                waypoints[i].GetComponentInChildren<TextMeshProUGUI>().enabled = false;
             }
         }
     }
