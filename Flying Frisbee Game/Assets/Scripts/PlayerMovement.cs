@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (canPlanPath && IsPlayerSelected())
         {
+            // add new waypoints
             if (Input.GetMouseButtonDown(0))
             {
                 try
@@ -43,6 +44,8 @@ public class PlayerMovement : MonoBehaviour
                     Debug.Log(ex.Message);
                 }
             }
+
+            // remove last waypoint
             else if (Input.GetMouseButtonDown(1))
             {
                 waypointManager.RemoveLastWaypoint();
@@ -64,20 +67,16 @@ public class PlayerMovement : MonoBehaviour
         // automated movement to waypoints
         try
         {
-            if (waypointManager.IsWaypointAvailable())
+            Vector3 nextWaypoint = waypointManager.GetNextWaypoint();
+            GetComponent<NavMeshAgent>().SetDestination(nextWaypoint);
+            if (Vector3.Distance(transform.position, nextWaypoint) < 2)
             {
-                Vector3 nextWaypoint = waypointManager.GetNextWaypoint();
-                GetComponent<NavMeshAgent>().SetDestination(nextWaypoint);
-                if (Vector3.Distance(transform.position, nextWaypoint) < 2)
-                {
-                    waypointManager.RemoveNextWaypoint();
-                }
-
+                waypointManager.RemoveNextWaypoint();
             }
         }
         catch (WaypointManager.NoWaypointAvailableException)
         {
-            // do nothing
+            GetComponent<NavMeshAgent>().ResetPath();
         }
     }
 
@@ -95,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // throw exception if player did not click on the ground plane (e.g. selected a player)
-        throw new NoHitOnGroundPlaneException("Player didn't click on the ground plane.");
+        throw new NoHitOnGroundPlaneException("Player didn't click on the ground plane. Instead: " + hitInfo.collider.name);
     }
 
     private bool IsPlayerSelected()
