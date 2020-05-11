@@ -9,9 +9,23 @@ public class WaypointManager : MonoBehaviour
     public GameObject waypointPrefab;
     public List<GameObject> waypoints = new List<GameObject>();
 
+    private LineRenderer waypointLineConnector;
+
+    void Start()
+    {
+        waypointLineConnector = GetComponent<LineRenderer>();
+    }
+
     public bool IsWaypointAvailable()
     {
         return waypoints.Count > 0;
+    }
+
+    public void AddNewWaypoint(Vector3 position)
+    {
+        waypoints.Add(GameObject.Instantiate(waypointPrefab, position, Quaternion.identity));
+
+        UpdateLinesBetweenWaypoints();
     }
 
     public Vector3 GetNextWaypointPosition()
@@ -25,25 +39,22 @@ public class WaypointManager : MonoBehaviour
 
     public void RemoveNextWaypoint()
     {
-        if (IsWaypointAvailable())
-        {
-            Destroy(waypoints[0].gameObject);
-            waypoints.RemoveAt(0);
-        }
-    }
-
-    public void AddNewWaypoint(Vector3 position)
-    {
-        waypoints.Add(GameObject.Instantiate(waypointPrefab, position, Quaternion.identity));
+        RemoveWaypointAtIndex(0);
     }
 
     public void RemoveLastWaypoint()
     {
+        RemoveWaypointAtIndex(waypoints.Count - 1);
+    }
+
+    private void RemoveWaypointAtIndex(int index)
+    {
         if (IsWaypointAvailable())
         {
-            int index = waypoints.Count - 1;
             Destroy(waypoints[index].gameObject);
-            waypoints.RemoveAt(waypoints.Count - 1);
+            waypoints.RemoveAt(index);
+
+            UpdateLinesBetweenWaypoints();
         }
     }
 
@@ -51,25 +62,42 @@ public class WaypointManager : MonoBehaviour
     {
         for (int i = 0; i < waypoints.Count; i++)
         {
+            TextMeshProUGUI text = waypoints[i].GetComponentInChildren<TextMeshProUGUI>();
             if (show)
             {
                 // show waypoint
                 waypoints[i].GetComponent<MeshRenderer>().enabled = true;
 
                 // show number above waypoint
-                waypoints[i].GetComponentInChildren<TextMeshProUGUI>().enabled = true;
-                waypoints[i].GetComponentInChildren<TextMeshProUGUI>().SetText((i + 1).ToString());
+                text.enabled = true;
+                text.SetText((i + 1).ToString());
 
+                // show line between waypoints
+                waypointLineConnector.enabled = true;
             }
             else
             {
                 // hide waypoint and number
                 waypoints[i].GetComponent<MeshRenderer>().enabled = false;
-                waypoints[i].GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+                text.enabled = false;
+
+                // hide line between waypoints
+                waypointLineConnector.enabled = false;
             }
         }
     }
 
+    private void UpdateLinesBetweenWaypoints()
+    {
+        Vector3[] positions = new Vector3[waypoints.Count];
+        for (int i = 0; i < waypoints.Count; i++)
+        {
+            positions[i] = waypoints[i].transform.position;
+        }
+
+        waypointLineConnector.positionCount = positions.Length;
+        waypointLineConnector.SetPositions(positions);
+    }
 
     public class NoWaypointAvailableException : Exception
     {

@@ -92,14 +92,21 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit hitInfo;
         if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo))
         {
-            if (hitInfo.collider.name == "GroundPlane")
+            if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Groundplane Layer"))
             {
                 return hitInfo.point;
             }
         }
 
         // throw exception if player did not click on the ground plane (e.g. selected a player)
-        throw new NoHitOnGroundPlaneException("Player didn't click on the ground plane. Instead: " + hitInfo.collider.name);
+        if (hitInfo.collider)
+        {
+            throw new NoHitOnGroundPlaneException("Player didn't click on the ground plane. Instead: " + hitInfo.collider.name);
+        }
+        else
+        {
+            throw new NoHitOnGroundPlaneException("Player didn't click on the ground plane.");
+        }
     }
 
     private bool IsPlayerSelected()
