@@ -45,6 +45,7 @@ public class Frisbee : MonoBehaviour
     {
         CheckIfOutOfBounds();
         CheckIfCaughtInEndzone();
+        CheckIfOnGround();
 
         ToggleNavMeshObstacleForFrisbee();
 
@@ -176,6 +177,15 @@ public class Frisbee : MonoBehaviour
         }
     }
 
+    private bool CheckIfOnGround()
+    {
+        if (IsStateChangeFresh(state, State.ON_GROUND))
+        {
+            GameEvents.current.PlayerLost();
+            return true;
+        }
+        return false;
+    }
     private bool CheckIfOutOfBounds()
     {
         if (frisbeeObject.transform.position.y < -0.5)

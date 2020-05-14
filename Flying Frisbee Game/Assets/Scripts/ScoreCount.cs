@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ScoreCount : MonoBehaviour
 {
 
     public int playerScore;
     public int opponentScore;
+    public GameObject scoreObject;
 
     void Start()
     {
@@ -19,8 +21,13 @@ public class ScoreCount : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("Player Score: " + playerScore);
-        Debug.Log("Opponent Score: " + opponentScore);
+        ShowScore();
+    }
+
+    private void ShowScore()
+    {
+        string scoreText = playerScore + " : " + opponentScore;
+        scoreObject.GetComponent<TextMeshProUGUI>().SetText(scoreText);
     }
 
 }
