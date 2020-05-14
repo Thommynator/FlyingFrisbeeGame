@@ -29,4 +29,24 @@ public class GameEvents : MonoBehaviour
             onMovementManagerExit();
         }
     }
+
+    public event Action onCatchInEndzone;
+    public void CatchInEndzone()
+    {
+        if (onCatchInEndzone != null)
+        {
+            onCatchInEndzone();
+        }
+    }
+
+    public event Action onPlayerLost;
+    public void PlayerLost()
+    {
+        if (onCatchInEndzone != null)
+        {
+            onPlayerLost();
+        }
+    }
+
+
 }
