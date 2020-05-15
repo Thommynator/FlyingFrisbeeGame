@@ -181,7 +181,7 @@ public class Frisbee : MonoBehaviour
     {
         if (IsStateChangeFresh(state, State.ON_GROUND))
         {
-            GameEvents.current.PlayerLost();
+            GameEvents.current.OpponentScoredPoint();
             return true;
         }
         return false;
@@ -191,7 +191,7 @@ public class Frisbee : MonoBehaviour
         if (frisbeeObject.transform.position.y < -0.5)
         {
             state = State.OUT_OF_BOUNDS;
-            GameEvents.current.PlayerLost();
+            GameEvents.current.OpponentScoredPoint();
             return true;
         }
         return false;
@@ -202,7 +202,7 @@ public class Frisbee : MonoBehaviour
         float endzoneDistance = 15f;
         if (IsStateChangeFresh(state, State.AT_PLAYER) && frisbeeObject.transform.position.z > endzoneDistance)
         {
-            GameEvents.current.CatchInEndzone();
+            GameEvents.current.PlayerScoredPoint();
             return true;
         }
         return false;

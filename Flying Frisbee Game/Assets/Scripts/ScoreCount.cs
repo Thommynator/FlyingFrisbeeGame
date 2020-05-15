@@ -12,8 +12,8 @@ public class ScoreCount : MonoBehaviour
 
     void Start()
     {
-        GameEvents.current.onCatchInEndzone += () => { playerScore += 1; };
-        GameEvents.current.onPlayerLost += () => { opponentScore += 1; };
+        GameEvents.current.onPlayerScoredPoint += () => { playerScore += 1; };
+        GameEvents.current.onOpponentScoredPoint += () => { opponentScore += 1; };
 
         playerScore = 0;
         opponentScore = 0;
@@ -26,7 +26,7 @@ public class ScoreCount : MonoBehaviour
 
     private void ShowScore()
     {
-        string scoreText = playerScore + " : " + opponentScore;
+        string scoreText = $"{playerScore} : {opponentScore}";
         scoreObject.GetComponent<TextMeshProUGUI>().SetText(scoreText);
     }
 

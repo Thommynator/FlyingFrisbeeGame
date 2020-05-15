@@ -30,21 +30,21 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public event Action onCatchInEndzone;
-    public void CatchInEndzone()
+    public event Action onPlayerScoredPoint;
+    public void PlayerScoredPoint()
     {
-        if (onCatchInEndzone != null)
+        if (onPlayerScoredPoint != null)
         {
-            onCatchInEndzone();
+            onPlayerScoredPoint();
         }
     }
 
-    public event Action onPlayerLost;
-    public void PlayerLost()
+    public event Action onOpponentScoredPoint;
+    public void OpponentScoredPoint()
     {
-        if (onCatchInEndzone != null)
+        if (onOpponentScoredPoint != null)
         {
-            onPlayerLost();
+            onOpponentScoredPoint();
         }
     }
 
