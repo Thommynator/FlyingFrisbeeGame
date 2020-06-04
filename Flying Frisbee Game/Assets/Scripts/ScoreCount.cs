@@ -7,11 +7,18 @@ using UnityEngine.SceneManagement;
 public class ScoreCount : MonoBehaviour
 {
 
-    public int playerScore;
+    [HideInInspector]
+    public static string playerScorePrefKey = "PlayerScore";
 
+    [HideInInspector]
+    public static string opponentScorePrefKey = "OpponentScore";
+
+    public int playerScore;
     public GameObject playerScoredNotificationView;
+
     public int opponentScore;
     public GameObject opponentScoredNotificationView;
+
     private GameObject scoreTextObject;
 
     void Start()
@@ -24,8 +31,8 @@ public class ScoreCount : MonoBehaviour
         GameEvents.current.onPlayerScoredPoint += () => { playerScore += 1; };
         GameEvents.current.onOpponentScoredPoint += () => { opponentScore += 1; };
 
-        playerScore = PlayerPrefs.GetInt("PlayerScore", 0);
-        opponentScore = PlayerPrefs.GetInt("OpponentScore", 0);
+        playerScore = PlayerPrefs.GetInt(playerScorePrefKey, 0);
+        opponentScore = PlayerPrefs.GetInt(opponentScorePrefKey, 0);
     }
 
     void Update()
@@ -56,8 +63,8 @@ public class ScoreCount : MonoBehaviour
 
     private void RestartScene()
     {
-        PlayerPrefs.SetInt("PlayerScore", playerScore);
-        PlayerPrefs.SetInt("OpponentScore", opponentScore);
+        PlayerPrefs.SetInt(playerScorePrefKey, playerScore);
+        PlayerPrefs.SetInt(opponentScorePrefKey, opponentScore);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

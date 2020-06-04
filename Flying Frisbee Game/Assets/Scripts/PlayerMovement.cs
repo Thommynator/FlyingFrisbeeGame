@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (canPlanPath && IsPlayerSelected())
+        if (!PauseMenu.isGamePaused && canPlanPath && IsPlayerSelected())
         {
             // add new waypoints
             if (Input.GetMouseButtonDown(0))

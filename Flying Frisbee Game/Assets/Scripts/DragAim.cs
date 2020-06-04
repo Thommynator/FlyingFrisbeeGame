@@ -39,6 +39,14 @@ public class DragAim : MonoBehaviour
 
     void Update()
     {
+        if (PauseMenu.isGamePaused)
+        {
+            isAimingAllowed = false;
+        }
+        else
+        {
+            isAimingAllowed = true;
+        }
 
         if (isAimingAllowed && isAiming)
         {

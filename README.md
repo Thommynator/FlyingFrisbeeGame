@@ -4,6 +4,18 @@ With this little Ultimate Frisbee game I want to get more familiar with Unity.
 
 ## Changelog
 
+### 04.06.2020 (#17, #18)
+Scoring System
+* Point for the player, when frisbee is caught in the endzone.
+* Point for the opponent, when the frisbee touches the ground or is out of bound.
+
+Pause Menu
+* For pausing and resuming the game
+* Very basic "menu". So far, only for resetting the score
+* Possibility to quit the game
+
+![](demo6.gif)
+
 ### 11.05.2020
 Movement Manager (#12)
 * Can be accessed during game (Space key)
