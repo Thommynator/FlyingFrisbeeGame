@@ -43,8 +43,10 @@ public class Frisbee : MonoBehaviour
 
     void Update()
     {
-
         CheckIfOutOfBounds();
+        CheckIfCaughtInEndzone();
+        CheckIfOnGround();
+
         ToggleNavMeshObstacleForFrisbee();
 
         if (Input.GetMouseButtonDown(1) && state == State.AT_PLAYER)
@@ -175,11 +177,32 @@ public class Frisbee : MonoBehaviour
         }
     }
 
+    private bool CheckIfOnGround()
+    {
+        if (IsStateChangeFresh(state, State.ON_GROUND))
+        {
+            GameEvents.current.OpponentScoredPoint();
+            return true;
+        }
+        return false;
+    }
     private bool CheckIfOutOfBounds()
     {
         if (frisbeeObject.transform.position.y < -0.5)
         {
             state = State.OUT_OF_BOUNDS;
+            GameEvents.current.OpponentScoredPoint();
+            return true;
+        }
+        return false;
+    }
+
+    public bool CheckIfCaughtInEndzone()
+    {
+        float endzoneDistance = 15f;
+        if (IsStateChangeFresh(state, State.AT_PLAYER) && frisbeeObject.transform.position.z > endzoneDistance)
+        {
+            GameEvents.current.PlayerScoredPoint();
             return true;
         }
         return false;
@@ -204,6 +227,8 @@ public class Frisbee : MonoBehaviour
             AttachToPlayer(collision.gameObject, throwSide);
         }
     }
+
+
 
     public enum State
     {

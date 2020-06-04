@@ -29,4 +29,24 @@ public class GameEvents : MonoBehaviour
             onMovementManagerExit();
         }
     }
+
+    public event Action onPlayerScoredPoint;
+    public void PlayerScoredPoint()
+    {
+        if (onPlayerScoredPoint != null)
+        {
+            onPlayerScoredPoint();
+        }
+    }
+
+    public event Action onOpponentScoredPoint;
+    public void OpponentScoredPoint()
+    {
+        if (onOpponentScoredPoint != null)
+        {
+            onOpponentScoredPoint();
+        }
+    }
+
+
 }

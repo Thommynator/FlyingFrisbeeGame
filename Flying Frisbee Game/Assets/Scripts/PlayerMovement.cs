@@ -90,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
         Plane plane = new Plane(Vector3.up, 0.0f);
 
         RaycastHit hitInfo;
-        if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo))
+        if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity))
         {
             if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Groundplane Layer"))
             {
