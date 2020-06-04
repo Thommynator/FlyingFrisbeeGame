@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,7 +44,7 @@ public class MovementManager : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (!PauseMenu.isGamePaused && Input.GetKeyDown(KeyCode.Space))
         {
             isInManagerView = !isInManagerView;
 
