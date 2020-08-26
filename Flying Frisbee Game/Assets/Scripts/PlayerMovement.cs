@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 8;
     public bool canMove;
 
+    private Animator animator;
+
     private bool canPlanPath;
     private NavMeshAgent navMeshAgent;
 
@@ -30,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         playerSelector = gameObject.GetComponentInParent<PlayerSelector>();
         waypointManager = gameObject.GetComponentInChildren<WaypointManager>();
+        animator = gameObject.GetComponentInChildren<Animator>();
         canPlanPath = false;
     }
 
@@ -67,22 +70,27 @@ public class PlayerMovement : MonoBehaviour
         {
             Vector3 velocity = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized * moveSpeed;
             navMeshAgent.Move(velocity * Time.deltaTime);
+            animator.SetFloat("speed", velocity.magnitude);
         }
 
         // automated movement to waypoints
         try
         {
             Vector3 nextWaypoint = waypointManager.GetNextWaypointPosition();
-            GetComponent<NavMeshAgent>().SetDestination(nextWaypoint);
+            navMeshAgent.SetDestination(nextWaypoint);
             if ((transform.position - nextWaypoint).sqrMagnitude < 4)
             {
                 waypointManager.RemoveNextWaypoint();
             }
+            animator.SetFloat("speed", navMeshAgent.velocity.magnitude);
         }
         catch (WaypointManager.NoWaypointAvailableException)
         {
-            GetComponent<NavMeshAgent>().ResetPath();
+            navMeshAgent.ResetPath();
         }
+
+        Debug.Log("Speed: " + navMeshAgent.velocity.magnitude);
+
     }
 
     private Vector3 GetMousePositionOnPlaneAsWorldCoordinate()
