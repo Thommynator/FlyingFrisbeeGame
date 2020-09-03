@@ -15,18 +15,26 @@ public class VertStackDefense : MonoBehaviour
 
     private Vector2 perlinNoise;
 
+    private NavMeshAgent navMeshAgent;
+
+    private Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        animator = gameObject.GetComponentInChildren<Animator>();
+
         perlinNoise = new Vector2(Random.Range(0, 1000), Random.Range(0, 1000));
         frisbeeObject = GameObject.FindGameObjectWithTag("Frisbee");
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         IsPlayerToDefendHoldingTheFrisbee();
-        GetComponent<NavMeshAgent>().SetDestination(GetDefensePosition());
+        navMeshAgent.SetDestination(GetDefensePosition());
+        animator.SetFloat("speed", navMeshAgent.velocity.magnitude);
     }
 
     private bool IsPlayerToDefendHoldingTheFrisbee()

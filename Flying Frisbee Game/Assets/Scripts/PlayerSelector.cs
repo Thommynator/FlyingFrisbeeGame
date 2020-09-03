@@ -15,9 +15,8 @@ public class PlayerSelector : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        frisbee = GameObject.FindGameObjectWithTag("Frisbee");
-
         // assign it only once in the beginning to save performance during game
+        frisbee = GameObject.FindGameObjectWithTag("Frisbee");
         mainCamera = Camera.main;
 
         selectedPlayer = null;
@@ -55,7 +54,8 @@ public class PlayerSelector : MonoBehaviour
         foreach (Transform child in transform)
         {
             child.gameObject.GetComponent<PlayerMovement>().canMove = false;
-            child.gameObject.GetComponent<MeshRenderer>().material = playerMaterial;
+            Transform playerCapsule = child.GetChild(0).GetChild(0);
+            playerCapsule.GetComponent<MeshRenderer>().material = playerMaterial;
             selectedPlayer = null;
         }
     }
@@ -65,8 +65,10 @@ public class PlayerSelector : MonoBehaviour
     {
         if (player != frisbee.GetComponent<Frisbee>().GetPlayerHoldingFrisbee())
         {
+            player.GetComponentInChildren<Animator>().SetTrigger("selected");
             player.GetComponent<PlayerMovement>().canMove = true;
-            player.GetComponent<MeshRenderer>().material = selectedPlayerMaterial;
+            Transform playerCapsule = player.transform.GetChild(0).GetChild(0);
+            playerCapsule.GetComponent<MeshRenderer>().material = selectedPlayerMaterial;
             selectedPlayer = player;
         }
     }
