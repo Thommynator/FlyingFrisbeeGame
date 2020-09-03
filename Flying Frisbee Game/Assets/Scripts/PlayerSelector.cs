@@ -65,6 +65,7 @@ public class PlayerSelector : MonoBehaviour
     {
         if (player != frisbee.GetComponent<Frisbee>().GetPlayerHoldingFrisbee())
         {
+            player.GetComponentInChildren<Animator>().SetTrigger("selected");
             player.GetComponent<PlayerMovement>().canMove = true;
             Transform playerCapsule = player.transform.GetChild(0).GetChild(0);
             playerCapsule.GetComponent<MeshRenderer>().material = selectedPlayerMaterial;

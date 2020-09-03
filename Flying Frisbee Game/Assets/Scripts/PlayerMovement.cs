@@ -88,9 +88,6 @@ public class PlayerMovement : MonoBehaviour
         {
             navMeshAgent.ResetPath();
         }
-
-        Debug.Log("Speed: " + navMeshAgent.velocity.magnitude);
-
     }
 
     private Vector3 GetMousePositionOnPlaneAsWorldCoordinate()
