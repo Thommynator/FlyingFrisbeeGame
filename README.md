@@ -4,6 +4,13 @@ With this little Ultimate Frisbee game I want to get more familiar with Unity.
 
 ## Changelog
 
+### 03.09.2020 (#26)
+Animations
+* Idle, Running, Selected animation for player
+* Idle, Running animation for opponens
+
+![](demo7.gif)
+
 ### 04.06.2020 (#17, #18)
 Scoring System
 * Point for the player, when frisbee is caught in the endzone.
