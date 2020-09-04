@@ -65,12 +65,13 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+
         // manual movement
+        Vector3 manualMovementVelocity = Vector3.zero;
         if (canMove)
         {
-            Vector3 velocity = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized * moveSpeed;
-            navMeshAgent.Move(velocity * Time.deltaTime);
-            animator.SetFloat("speed", velocity.magnitude);
+            manualMovementVelocity = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized * moveSpeed;
+            navMeshAgent.Move(manualMovementVelocity * Time.deltaTime);
         }
 
         // automated movement to waypoints
@@ -88,6 +89,7 @@ public class PlayerMovement : MonoBehaviour
         {
             navMeshAgent.ResetPath();
         }
+        animator.SetFloat("speed", Mathf.Max(manualMovementVelocity.magnitude, navMeshAgent.velocity.magnitude));
     }
 
     private Vector3 GetMousePositionOnPlaneAsWorldCoordinate()
