@@ -83,6 +83,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 waypointManager.RemoveNextWaypoint();
             }
+            animator.SetFloat("speed", navMeshAgent.velocity.magnitude);
         }
         catch (WaypointManager.NoWaypointAvailableException)
         {
