@@ -75,12 +75,13 @@ public class MovementManager : MonoBehaviour
         currentMoveCoroutine = MoveCameraToTopView();
         StartCoroutine(currentMoveCoroutine);
     }
+
     private IEnumerator MoveCameraToTopView()
     {
         while ((mainCameraRig.transform.position - targetTopViewPosition).sqrMagnitude > 0.001f)
         {
             mainCameraRig.transform.position = Vector3.Lerp(mainCameraRig.transform.position, targetTopViewPosition, lerpSpeed);
-            mainCameraRig.transform.rotation = Quaternion.Lerp(mainCameraRig.transform.rotation, targetTopViewRotation, lerpSpeed);
+            mainCameraRig.transform.rotation = Quaternion.Lerp(mainCameraRig.transform.rotation, targetTopViewRotation, 1.5f * lerpSpeed);
             yield return null;
         }
         Debug.Log("Moved camera to Movement Manager view");
@@ -108,7 +109,7 @@ public class MovementManager : MonoBehaviour
         while ((mainCameraRig.transform.position - targetPosition).sqrMagnitude > 1f)
         {
             mainCameraRig.transform.position = Vector3.Lerp(mainCameraRig.transform.position, targetPosition, lerpSpeed);
-            mainCameraRig.transform.rotation = Quaternion.Lerp(mainCameraRig.transform.rotation, initialCameraRigRotation, lerpSpeed);
+            mainCameraRig.transform.rotation = Quaternion.Lerp(mainCameraRig.transform.rotation, initialCameraRigRotation, 1.5f * lerpSpeed);
             yield return null;
         }
         Debug.Log("Moved camera to play view");
