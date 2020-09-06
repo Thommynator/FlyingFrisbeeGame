@@ -2,6 +2,8 @@
 
 With this little Ultimate Frisbee game I want to get more familiar with Unity.
 
+**[Try it out!](https://thommynator.github.io/FlyingFrisbeeGame/)** 😉
+
 ## Changelog
 
 ### 06.09.2020
