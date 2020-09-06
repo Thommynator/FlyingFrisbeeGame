@@ -66,29 +66,34 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
 
-        // manual movement
         Vector3 manualMovementVelocity = Vector3.zero;
         if (canMove)
         {
+            // manual movement
             manualMovementVelocity = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized * moveSpeed;
             navMeshAgent.Move(manualMovementVelocity * Time.deltaTime);
-        }
 
-        // automated movement to waypoints
-        try
-        {
-            Vector3 nextWaypoint = waypointManager.GetNextWaypointPosition();
-            navMeshAgent.SetDestination(nextWaypoint);
-            if ((transform.position - nextWaypoint).sqrMagnitude < 4)
+            // automated movement to waypoints
+            try
             {
-                waypointManager.RemoveNextWaypoint();
+                Vector3 nextWaypoint = waypointManager.GetNextWaypointPosition();
+                navMeshAgent.SetDestination(nextWaypoint);
+                if ((transform.position - nextWaypoint).sqrMagnitude < 4)
+                {
+                    waypointManager.RemoveNextWaypoint();
+                }
+                animator.SetFloat("speed", navMeshAgent.velocity.magnitude);
             }
-            animator.SetFloat("speed", navMeshAgent.velocity.magnitude);
+            catch (WaypointManager.NoWaypointAvailableException)
+            {
+                navMeshAgent.ResetPath();
+            }
         }
-        catch (WaypointManager.NoWaypointAvailableException)
+        else
         {
             navMeshAgent.ResetPath();
         }
+
         animator.SetFloat("speed", Mathf.Max(manualMovementVelocity.magnitude, navMeshAgent.velocity.magnitude));
     }
 
