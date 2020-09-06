@@ -188,10 +188,13 @@ public class Frisbee : MonoBehaviour
     }
     private bool CheckIfOutOfBounds()
     {
-        if (frisbeeObject.transform.position.y < -0.5)
+        if (frisbeeObject.transform.position.y < -0.1f)
         {
             state = State.OUT_OF_BOUNDS;
-            GameEvents.current.OpponentScoredPoint();
+            if (IsStateChangeFresh(state, State.OUT_OF_BOUNDS))
+            {
+                GameEvents.current.OpponentScoredPoint();
+            }
             return true;
         }
         return false;
