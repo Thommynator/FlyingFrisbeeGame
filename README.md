@@ -11,3 +11,5 @@ You can play test a simplified (e.g. no light/shadows, etc.) version online, dir
 
 * [1.0.0](https://github.com/Thommynator/FlyingFrisbeeGame/releases/tag/1.0.0)
 
+## Contribution
+[See further infos in the Wiki](https://github.com/Thommynator/FlyingFrisbeeGame/wiki#contribution)
